@@ -3,12 +3,25 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Today's Date</title>
+        <title>Display Items by Search</title>
+        <script type = "text/javascript" src = "main.js">
+        </script>
     </head>
-<body>
+<body onload="getData()">
 
-<script src="main.js"></script>
-
-
+<h1>SwipeBay</h1>
+    <form>
+        <!-- <input id = "Auction" type = "checkbox">
+        <label for = "Auction">Show only auctions</label>
+        <input id = "Auction" type = "checkbox">
+        <label for = "Auction">Show only auctions</label>
+        <input id = "Auction" type = "checkbox">
+        <label for = "Auction">Show only auctions</label> -->
+        <label for = "Search"> Search:</label>
+        <input id = "Search" type = "text">
+        <input id = "submit" type = "submit" onclick="_cb_findItemsByKeywords()">
+    </form>
+<div id = "results"></div>
+<button onclick="_cb_findItemsByKeywords()">Get Data</button>
 </body>
 </html>
