@@ -59,11 +59,5 @@ function search(value){
     _cb_findItemsByKeywords();
   }
 
-//  const form = document.getElementById('form')
-//  if(form){
-//     form.addEventListener('submit', function(){  
-//       search(document.getElementById('search').value())
-//     })
-//   }
 
   
