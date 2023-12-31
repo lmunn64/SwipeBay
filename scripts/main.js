@@ -2,9 +2,8 @@
 const key = 'LukeMunn-SwipeBay-PRD-a83712ee4-498c5642';
 var keyword
 var url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&itemFilter.name=MaxPrice&itemFilter.value=10.00&itemFilter.paramName=Currency&itemFilter.paramValue=USD&paginationInput.entriesPerPage=6'
-
 var data
-
+var myStorage = window.sessionStorage;
 var filterarray = [
   {"name":"MaxPrice",
    "value":"25",
@@ -20,7 +19,6 @@ var filterarray = [
    "paramValue":""},
   ];
 
-
 // Make a GET request
 async function getData(){
   const response = await fetch(url)
@@ -31,12 +29,13 @@ async function getData(){
   // return console.log(data);
 }
 
-//Parses response and builds an HTML table to display search results
+//Parses response and builds an HTML div variable stored in sessionStorage
 async function _cb_findItemsByKeywords(){
   await getData();
   var items = data.findItemsByKeywordsResponse[0].searchResult[0].item || [];
   // console.log(items)
   var html = []
+  var temp = document.createElement('div')
   html.push('<table width = "100%" border = "0" cellspacing = "0" cellpaddig = "3"><tbody>');
   for (var i = 0; i < items.length; i++){
     var item = items[i]
@@ -44,20 +43,27 @@ async function _cb_findItemsByKeywords(){
     var pic = item.galleryURL;
     var viewItem = item.viewItemURL;
     if (title != null && viewItem != null) {
-      html.push('<tr><td>' + '<img src="' + pic + '" border="2">' + '</td>' +
-      '<td><a href="' + viewItem + '" target="_blank">' + title + '</a></td></tr>');
+      var div = document.createElement('div');
+      div.innerText = title
+      var img = document.createElement('img');
+      img.setAttribute("src", pic);
+      div.append(img);
+      temp.appendChild(div); 
+      console.log(div.innerHTML)
     }
   }
-  html.push('</tbody></table>');
-  document.getElementById("results").innerHTML = html.join("");
+  myStorage.setItem("searchValue", temp.innerHTML);
+  //'<div>' + '<img src="' + pic + '" border="2">' + '</div>'
+  // html.push('</tbody></table>');
+  // document.getElementById("results").innerHTML = html.join("");
   }
   
-function search(value){
+async function search(value){
     let keyword = value
     url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.3.1&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&paginationInput.entriesPerPage=6'
-    getData();
-    _cb_findItemsByKeywords();
+    await getData();
+    await _cb_findItemsByKeywords();
+    window.location.href = "swipe.html"
   }
-
 
   
