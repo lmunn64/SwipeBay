@@ -1,5 +1,7 @@
 // Define the API URL
 const key = 'LukeMunn-SwipeBay-PRD-a83712ee4-498c5642';
+const client_secret = 'PRD-83712ee43d82-09b8-4b7d-9da3-5102';
+const b64encode = btoa(key+':'+client_secret);
 var keyword
 var url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&itemFilter.name=MaxPrice&itemFilter.value=10.00&itemFilter.paramName=Currency&itemFilter.paramValue=USD&paginationInput.entriesPerPage=6&outputSelector=pictureURLLarge'
 var data
@@ -27,6 +29,26 @@ async function getData(){
   }
   data = await response.json();
 }
+async function consent(){
+  window.location = 'https://auth.ebay.com/oauth2/authorize?client_id='+key+'&redirect_uri=Luke_Munn-LukeMunn-SwipeB-fkbal&response_type=code&scope=https://api.ebay.com/oauth/api_scope'
+  
+}
+// async function grantRequest(){
+//     const response = await fetch('https://api.ebay.com/identity/v1/oauth2/authorize',{
+//       method: "POST",
+//       headers:{
+//         'Content-Type': 'application/x-www-form-urlencoded',
+//         'Authorization': 'Basic' + b64encode
+//       },
+//       body: JSON.stringify({
+//         grant_type: 'client_credentials',
+//         scope: 'https://api.ebay.com/oauth/api_scope'
+//       })
+//     });
+//     if (!response.ok){
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
+// }
 
 //Parses response and builds an HTML div variable stored in sessionStorage
 async function _cb_findItemsByKeywords(){
@@ -54,7 +76,7 @@ async function search(value){
     url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.3.1&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&paginationInput.entriesPerPage=6&outputSelector=PictureURLLarge'
     await getData();
     await _cb_findItemsByKeywords();
-    window.location.href = "swipe.html"
+    window.location.href = "/pages/swipe.html"
   }
 
 // Function to create separate Bootstrap cards for each item
