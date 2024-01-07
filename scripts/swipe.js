@@ -1,5 +1,5 @@
 
-var searchResults = window.localStorage.getItem('searchValue');
+var searchResults = window.sessionStorage.getItem('searchValue');
 
 // Loads saved search cards HTML and injects into Slick swipe carousel
 onload = () => {
