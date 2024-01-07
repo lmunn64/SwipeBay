@@ -15,14 +15,14 @@
         const ruName = 'Luke_Munn-LukeMunn-SwipeB-fkbal'
         const client_secret = 'PRD-83712ee43d82-09b8-4b7d-9da3-5102';
         const b64encode = btoa(key+':'+client_secret);
-        async function getAuthCode(){
+        function getAuthCode(){
             var myStorage = window.sessionStorage
             var url = window.location.href;
             const arra = url.split("=");
             const codearr = arra[1].split('&');
             const authCode = codearr[0];
             myStorage.setItem("authCode", authCode);
-            await grantRequest()
+            grantRequest()
         }
         async function grantRequest(){
             const response = await fetch('https://api.ebay.com/identity/v1/oauth2/token',{
