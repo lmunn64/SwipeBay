@@ -76,7 +76,7 @@ async function search(value){
     url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.3.1&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&paginationInput.entriesPerPage=6&outputSelector=PictureURLLarge'
     await getData();
     await _cb_findItemsByKeywords();
-    window.location.href = "/pages/swipe.html"
+    window.location.href = "pages/swipe.html"
   }
 
 // Function to create separate Bootstrap cards for each item
