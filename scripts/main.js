@@ -5,7 +5,7 @@ const b64encode = btoa(key+':'+client_secret);
 var keyword
 var url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&itemFilter.name=MaxPrice&itemFilter.value=10.00&itemFilter.paramName=Currency&itemFilter.paramValue=USD&paginationInput.entriesPerPage=6&outputSelector=pictureURLLarge'
 var data
-var myStorage = window.sessionStorage;
+var myStorage = window.localStorage;
 var filterarray = [
   {"name":"MaxPrice",
    "value":"25",
