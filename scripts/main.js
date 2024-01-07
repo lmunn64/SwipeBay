@@ -34,24 +34,33 @@ async function consent(){
   window.location = 'https://auth.ebay.com/oauth2/authorize?client_id='+key+'&redirect_uri=Luke_Munn-LukeMunn-SwipeB-fkbal&response_type=code&scope=https://api.ebay.com/oauth/api_scope'
   
 }
-async function grantRequest(){
-    const response = await fetch('https://api.ebay.com/identity/v1/oauth2/token',{
-      method: "POST",
-      headers:{
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Basic' + b64encode
-      },
-      body: JSON.stringify({
-        grant_type: 'authorization_code',
-        code: window.sessionStorage.getItem('authCode'),
-        redirect_uri: ruName
-      })
-    });
-    if (!response.ok){
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+function getAuthCode(){
+  var myStorage = window.sessionStorage
+  var url = window.location.href;
+  const arra = url.split("=");
+  const codearr = arra[1].split('&');
+  const authCode = codearr[0];
+  myStorage.setItem("authCode", authCode);
+  grantRequest()
 }
-
+async function grantRequest(){
+  const response = await fetch('https://api.ebay.com/identity/v1/oauth2/token',{
+  method: "POST",
+  headers:{
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Basic' + b64encode
+  },
+  body: JSON.stringify({
+      grant_type: 'authorization_code',
+      code: window.sessionStorage.getItem('authCode'),
+      redirect_uri: ruName
+  })
+  });
+  if (!response.ok){
+  throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  console.log(response.json());
+}
 //Parses response and builds an HTML div variable stored in sessionStorage
 async function _cb_findItemsByKeywords(){
   await getData();
