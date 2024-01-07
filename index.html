@@ -13,7 +13,7 @@
         
         <!-- Bootstrap bundle -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        
+        <script type = "text/javascript" src = "../scripts/main.js"></script>
     </head>
 
     <body onload = sessionStorage.clear() style="background-color: rgba(255, 255, 255, 0.151);">
@@ -22,7 +22,7 @@
     <div class="container border" style="height: 580px;">
     
         <h1 class ="text-center my-4">
-            <a href = index.html> <img src="images/swipeBay.png" style= 'max-width: 30%;'class="img-fluid" alt="logo"></a>
+            <a href = index.html> <img src="../images/swipeBay.png" style= 'max-width: 30%;'class="img-fluid" alt="logo"></a>
         </h1>
 
         <div class="row justify-content-center my-4">
@@ -34,13 +34,13 @@
             <button class="btn btn-outline-primary" id = "submit" type = "button" onclick="search(Search.value)">Search</button>
        </div> 
        <div class="row justify-content-center">
-        <a href = "https://auth.ebay.com/oauth2/authorize?client_id=LukeMunn-SwipeBay-PRD-a83712ee4-498c5642&redirect_uri=Luke_Munn-LukeMunn-SwipeB-fkbal&response_type=code&scope=https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/sell.marketing.readonly https://api.ebay.com/oauth/api_scope/sell.marketing https://api.ebay.com/oauth/api_scope/sell.inventory.readonly https://api.ebay.com/oauth/api_scope/sell.inventory https://api.ebay.com/oauth/api_scope/sell.account.readonly https://api.ebay.com/oauth/api_scope/sell.account https://api.ebay.com/oauth/api_scope/sell.fulfillment.readonly https://api.ebay.com/oauth/api_scope/sell.fulfillment https://api.ebay.com/oauth/api_scope/sell.analytics.readonly https://api.ebay.com/oauth/api_scope/sell.finances https://api.ebay.com/oauth/api_scope/sell.payment.dispute https://api.ebay.com/oauth/api_scope/commerce.identity.readonly https://api.ebay.com/oauth/api_scope/sell.reputation https://api.ebay.com/oauth/api_scope/sell.reputation.readonly https://api.ebay.com/oauth/api_scope/commerce.notification.subscription https://api.ebay.com/oauth/api_scope/commerce.notification.subscription.readonly https://api.ebay.com/oauth/api_scope/sell.stores https://api.ebay.com/oauth/api_scope/sell.stores.readonly" class="btn btn-outline-primary" id = "submit" role = "button">request</a>
+        <a href = "https://auth.ebay.com/oauth2/authorize?client_id=LukeMunn-SwipeBay-PRD-a83712ee4-498c5642&redirect_uri=Luke_Munn-LukeMunn-SwipeB-fkbal&response_type=code&scope=https://api.ebay.com/oauth/api_scope" class="btn btn-outline-primary" id = "submit" role = "button">request</a>
    </div> 
 
     </div>
    
     
-    <script type = "text/javascript" src = "../scripts/main.js"></script>
+   
 
     <!-- Bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
