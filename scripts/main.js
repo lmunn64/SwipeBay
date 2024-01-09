@@ -5,7 +5,7 @@ const client_secret = 'PRD-83712ee43d82-09b8-4b7d-9da3-5102';
 const b64encode = btoa(key+':'+client_secret);
 var keyword
 var url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&itemFilter.name=MaxPrice&itemFilter.value=10.00&itemFilter.paramName=Currency&itemFilter.paramValue=USD&paginationInput.entriesPerPage=6&outputSelector=pictureURLLarge'
-var data
+var JSONData
 var myStorage = window.sessionStorage;
 var filterarray = [
   {"name":"MaxPrice",
@@ -23,12 +23,19 @@ var filterarray = [
   ];
 
 // Make a GET request
-async function getData(){
-  const response = await fetch(url)
-  if (!response.ok){
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  data = await response.json();
+function getSearchData(){
+  return fetch('http://127.0.0.1:3000/search',{
+    method: 'POST',
+    headers:{
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({url: url})
+  })
+  .then((response)=> response.json())
+  .then((data)=>{
+    JSONData = data;
+    console.log(JSONData)
+});
 }
 async function consent(){
   window.location = 'https://auth.ebay.com/oauth2/authorize?client_id='+key+'&redirect_uri=Luke_Munn-LukeMunn-SwipeB-fkbal&response_type=code&scope=https://api.ebay.com/oauth/api_scope'
@@ -36,7 +43,7 @@ async function consent(){
 }
 function getAuthCode(){
   var myStorage = window.sessionStorage
-  var url = window.location.href;
+  var url =  window.location.href;
   const arra = url.split("=");
   const codearr = arra[1].split('&');
   const authCode = codearr[0];
@@ -63,14 +70,15 @@ async function grantRequest(){
 }
 //Parses response and builds an HTML div variable stored in sessionStorage
 async function _cb_findItemsByKeywords(){
-  await getData();
-  var items = data.findItemsByKeywordsResponse[0].searchResult[0].item || [];
-  var html = []
+  var items = JSONData.findItemsByKeywordsResponse[0].searchResult[0].item || [];
   var temp = document.createElement('div')
   for (var i = 0; i < items.length; i++){
     var item = items[i]
     var title = item.title;
-    var pic = item.pictureURLLarge;
+    if(item.pictureURLLarge == undefined){
+      var pic = item.galleryURL;
+    }
+    else{var pic = item.pictureURLLarge;}
     var viewItem = item.viewItemURL;
     var price = "$" + item.sellingStatus[0].convertedCurrentPrice[0]["__value__"];
     if (title != null && viewItem != null) {
@@ -83,11 +91,12 @@ async function _cb_findItemsByKeywords(){
 
 //Complete search function
 async function search(value){
-    let keyword = value
-    url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.3.1&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&paginationInput.entriesPerPage=6&outputSelector=PictureURLLarge'
-    await getData();
+    keyword = value
+    url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.3.1&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&paginationInput.entriesPerPage=8&outputSelector=PictureURLLarge'
+    await getSearchData();
     await _cb_findItemsByKeywords();
     window.location.assign("swipe.html");
+    console.log(JSONData)
   }
 
 // Function to create separate Bootstrap cards for each item
