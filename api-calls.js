@@ -19,7 +19,7 @@ app.use(cors())
 app.use(bodyParser.json());
 
 const options = {
-    origin: 'http://localhost:3000',
+    origin: 'https://localhost:3000',
     }
 app.use(cors(options))
 
