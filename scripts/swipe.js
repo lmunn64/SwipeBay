@@ -10,7 +10,7 @@ onload = () => {
     }
 }
 function swipeFunction(){ 
-     $(document).ready(function(){
+     $(document).ready(function(){ 
     $('.swipe').slick({
       infinite: true,
       speed: 300,
