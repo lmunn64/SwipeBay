@@ -24,7 +24,7 @@ var filterarray = [
 
 // Make a GET request
 function getSearchData(){
-  return fetch('http://127.0.0.1:3000/search',{
+  return fetch('http://192.168.1.71:3000/search',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
