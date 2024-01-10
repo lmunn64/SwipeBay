@@ -24,7 +24,7 @@ var filterarray = [
 
 // Make a GET request
 function getSearchData(){
-  return fetch('http://192.168.1.71:3000/search',{
+  return fetch('https://swipebay.serveo.net/search',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
