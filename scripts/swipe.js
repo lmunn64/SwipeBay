@@ -17,7 +17,8 @@ function swipeFunction(){
       slidesToShow: 1,
       initialSlide: 1,
       adaptiveHeight: false,
-      arrows: false
+      arrows: false,
+      mobileFirst: true
     });
   });
 
