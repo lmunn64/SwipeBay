@@ -34,15 +34,16 @@
         </div>   
         
         <div class="row justify-content-center">
-            <button class="btn btn-outline-primary" id = "submit" type = "button" onclick="search(Search.value)">Search</button>
-       </div> 
-       <div class="row justify-content-center">
-        <a href = "https://auth.ebay.com/oauth2/authorize?client_id=LukeMunn-SwipeBay-PRD-a83712ee4-498c5642&redirect_uri=Luke_Munn-LukeMunn-SwipeB-fkbal&response_type=code&scope=https://api.ebay.com/oauth/api_scope" class="btn btn-outline-primary" id = "submit" role = "button">request</a>
+            <button class="btn btn-primary" id = "submit" type = "button" onclick="search(Search.value)">Search</button>
        </div> 
 
     </div>
-   
-    
+    <div class = "fixed-bottom my-4">
+        <p class=" text-center" style="color:grey; font-size: small;">Allow swipeBay to use your eBay account to add items to watchlist and other things I might add!</p>
+        <div class="row justify-content-center">
+            <button class="btn btn-outline-primary btn-sm" id = "submit" role = "button" onclick="userAuth()">Log In</button>
+        </div> 
+    </div>
    
 
     <!-- Bootstrap script -->

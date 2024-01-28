@@ -51,6 +51,9 @@ function getAuthCode(){
   myStorage.setItem("authCode", authCode);
   grantRequest()
 }
+async function userAuth(){
+  
+}
 async function grantRequest(){
   const response = await fetch('https://api.ebay.com/identity/v1/oauth2/token',{
   method: "POST",
