@@ -1,5 +1,8 @@
 // Define the API URL
-
+const key = 'LukeMunn-SwipeBay-PRD-a83712ee4-498c5642';
+const ruName = 'Luke_Munn-LukeMunn-SwipeB-fkbal'
+const client_secret = 'PRD-83712ee43d82-09b8-4b7d-9da3-5102';
+const b64encode = btoa(key+':'+client_secret);
 var keyword
 var url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&itemFilter.name=MaxPrice&itemFilter.value=10.00&itemFilter.paramName=Currency&itemFilter.paramValue=USD&paginationInput.entriesPerPage=6&outputSelector=pictureURLLarge'
 var JSONData
@@ -19,7 +22,7 @@ var filterarray = [
    "paramValue":""},
   ];
 
-// Make a search request through node server
+// Make a GET request
 function getSearchData(){
   return fetch('https://swipebay.serveo.net/search',{
     method: 'POST',
@@ -34,17 +37,11 @@ function getSearchData(){
     console.log(JSONData)
 });
 }
-// Get authURL
-function userAuth(){
-  return fetch('https://swipebay.serveo.net/auth',{
-    method: 'GET'
-  })
-}
+
 async function consent(){
   window.location = 'https://auth.ebay.com/oauth2/authorize?client_id='+key+'&redirect_uri=Luke_Munn-LukeMunn-SwipeB-fkbal&response_type=code&scope=https://api.ebay.com/oauth/api_scope'
   
 }
-
 function getAuthCode(){
   var myStorage = window.sessionStorage
   var url =  window.location.href;
@@ -53,6 +50,9 @@ function getAuthCode(){
   const authCode = codearr[0];
   myStorage.setItem("authCode", authCode);
   grantRequest()
+}
+async function userAuth(){
+  
 }
 async function grantRequest(){
   const response = await fetch('https://api.ebay.com/identity/v1/oauth2/token',{
@@ -99,7 +99,7 @@ async function search(value){
     url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.3.1&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&paginationInput.entriesPerPage=8&outputSelector=PictureURLLarge'
     await getSearchData();
     await _cb_findItemsByKeywords();
-    window.location.assign("swipe.html");
+    window.location.assign("pages/swipe.html");
     console.log(JSONData)
   }
 
