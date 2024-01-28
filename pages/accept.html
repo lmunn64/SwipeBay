@@ -11,22 +11,23 @@
 </head>
 <body onload = "getAuthCode()">
      <!-- Container for entire page -->
-     <div class="container border" style="height: 800px;">
-        <h1 class ="text-center my-4">
-        <a href = index.html> <img src="../images/swipeBay.png" style= 'max-width: 20%;'class="img-fluid" alt="logo"></a>
-        </h1>
-
-        <div class="row justify-content-md-center my-2">
-            <div class="col-4 ">
-                <input class="form-control" id = 
-                "Search" type= "text" placeholder="Search for items..."     aria-label="default input example" input-padding-x="">
-            </div>   
-        </div>
-
+     <div class="container border" style="height: 580px;">
         <div class="row justify-content-center">
-            <button class="btn btn-outline-primary" id = "submit" type ="button" onclick="search(Search.value)"> Search
-            </button>
-        </div> 
+            <div class ="col-lg-4 col-md-6 col-sm-8 col-8 my-2">
+                <a href = index.html> <img src="../images/swipeBay.png" class="img-fluid" alt="logo"></a>
+            </div>
+        </div>
+        
+
+        <div class="row justify-content-center my-4">
+             <input class="form-control-lg input-lg" id = 
+             "Search" type= "text" placeholder="Search for items..."     aria-label="default input example" input-padding-x="">
+        </div>   
+        
+        <div class="row justify-content-center">
+            <button class="btn btn-primary" id = "submit" type = "button" onclick="search(Search.value)">Search</button>
+       </div> 
+
     </div>
 
 
