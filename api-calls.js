@@ -51,10 +51,11 @@ app.post('/search', cors(),(req,res)=>{
     })();
    
 })
-app.post('/auth', () =>{
+app.get('/auth', () =>{
     const authUrl = ebayAuthToken.generateUserAuthorizationUrl('PRODUCTION', scopes);
     console.log(authUrl);
 })
+
 app.listen(PORT,()=>{
     console.log(`Server running on port ${PORT}`)
 })

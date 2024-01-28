@@ -37,7 +37,7 @@ function getSearchData(){
 // Get authURL
 function userAuth(){
   return fetch('https://swipebay.serveo.net/auth',{
-    method: 'POST'
+    method: 'GET'
   })
 }
 async function consent(){
