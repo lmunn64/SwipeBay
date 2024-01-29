@@ -58,6 +58,7 @@ async function getAuthCode(){
   const authCode = codearr[0];
   myStorage.setItem("authCode", authCode);
   console.log("Successful code");
+  grantToken();
 }
 
 //Grants token using auth code
