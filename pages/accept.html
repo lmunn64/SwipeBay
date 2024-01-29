@@ -13,9 +13,9 @@
     <script>
     window.addEventListener("load", myInit, true); 
     async function myInit(){
-        console.log("Hello");
-        await getAuthCode();
-        await grantToken();
+        const authCode = await getAuthCode();
+        console.log(authCode);
+        grantToken(authCode);
     }
     </script>
      <!-- Container for entire page -->

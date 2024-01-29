@@ -60,14 +60,14 @@ async function getAuthCode(){
 }
 
 //Grants token using auth code
-async function grantToken(){
+async function grantToken(code){
   return fetch('https://swipebay.serveo.net/token',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({code: window.sessionStorage.getItem("authCode")})
-    .then(console.log("successful token"))
+    body: JSON.stringify({code: code})
+    .then(console.log("Successful token"))
   })
 
 }
