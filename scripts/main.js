@@ -49,6 +49,23 @@ function userAuth(){
   })
   }
 
+//getUser
+function getUser(){
+  return fetch('https://swipebay.serveo.net/userInfo',{
+    method: 'POST'
+  })
+  .then((response)=> response.text())
+  .then((data)=> {
+    xmlReq = jQuery.parseXML(data);
+    $xml = $(xmlReq);
+    console.log(xmlReq);
+    $user = $xml.find("UserID");
+    $email = $xml.find("Email");
+    window.sessionStorage.setItem('userId', $user.text());
+    // window.sessionStorage.setItem('Email', $email.text());
+    document.getElementById('user').innerHTML = window.sessionStorage.getItem('userId')
+  })
+  }
 //Parses user authorization code from html on accept.html page after redirect from authorization page
 async function getAuthCode(){
   var url =  window.location.href;

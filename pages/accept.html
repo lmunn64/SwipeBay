@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accept</title>
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+        
     <!-- Bootstrap bundle -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script type = "text/javascript" src = "../scripts/main.js"></script>
@@ -16,10 +20,11 @@
         const authCode = await getAuthCode();
         console.log(authCode);
         grantToken(authCode);
+        getUser();
     }
     </script>
      <!-- Container for entire page -->
-     <div class="container border" style="height: 580px;">
+    <div class="container border" style="height: 580px;">
         <div class="row justify-content-center">
             <div class ="col-lg-4 col-md-6 col-sm-8 col-8 my-2">
                 <a href = index.html> <img src="../images/swipeBay.png" class="img-fluid" alt="logo"></a>
@@ -36,7 +41,12 @@
        </div> 
 
     </div>
-
+    <div class = "fixed-bottom my-4">
+        <p class=" text-center" style="color:grey; font-size: small;">Logged in as:</p>
+            <div class="row justify-content-center">
+                <p id = "user" class=" text-center" style=" font-size: small;"></p>
+            </div> 
+    </div>
 
     <!-- Bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
