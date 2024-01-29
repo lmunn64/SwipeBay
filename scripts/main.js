@@ -66,6 +66,7 @@ function getUser(){
     document.getElementById('user').innerHTML = window.sessionStorage.getItem('userId')
   })
   }
+
 //Parses user authorization code from html on accept.html page after redirect from authorization page
 async function getAuthCode(){
   var url =  window.location.href;
@@ -86,6 +87,7 @@ async function grantToken(code){
   })
   .then(console.log("Successful token"))
 }
+
 //Parses response and builds an HTML div variable stored in sessionStorage
 async function _cb_findItemsByKeywords(){
   var items = JSONData.findItemsByKeywordsResponse[0].searchResult[0].item || [];

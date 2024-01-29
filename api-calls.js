@@ -65,6 +65,7 @@ app.post('/userInfo', cors(), (req,res)=>{
       res.send(data);
     })();
 })
+
 app.post('/search', cors(),(req,res)=>{
     res.set({
       
