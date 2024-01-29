@@ -66,10 +66,9 @@ async function grantToken(code){
     headers:{
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({code: code})
-    .then(console.log("Successful token"))
+    body: JSON.stringify({code: code})  
   })
-
+  .then(console.log("Successful token"))
 }
 //Parses response and builds an HTML div variable stored in sessionStorage
 async function _cb_findItemsByKeywords(){
