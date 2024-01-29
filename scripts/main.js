@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 // Define the API URL
 const key = 'LukeMunn-SwipeBay-PRD-a83712ee4-498c5642';
 const ruName = 'Luke_Munn-LukeMunn-SwipeB-fkbal'
@@ -38,39 +40,37 @@ function getSearchData(){
 });
 }
 
-async function consent(){
-  window.location = 'https://auth.ebay.com/oauth2/authorize?client_id='+key+'&redirect_uri=Luke_Munn-LukeMunn-SwipeB-fkbal&response_type=code&scope=https://api.ebay.com/oauth/api_scope'
-  
-}
-function getAuthCode(){
+//Fetches and redirects to user authorization URL that allows users to authorize app to use their data.
+function userAuth(){
+  return fetch('https://swipebay.serveo.net/auth')
+  .then((response)=> response.text())
+  .then((data)=> {
+    window.location.assign(data);
+  })
+  }
+
+//Parses user authorization code from html on accept.html page after redirect from authorization page
+async function getAuthCode(){
   var myStorage = window.sessionStorage
   var url =  window.location.href;
   const arra = url.split("=");
   const codearr = arra[1].split('&');
   const authCode = codearr[0];
   myStorage.setItem("authCode", authCode);
-  grantRequest()
+  console.log("Successful code");
 }
-async function userAuth(){
-  
-}
-async function grantRequest(){
-  const response = await fetch('https://api.ebay.com/identity/v1/oauth2/token',{
-  method: "POST",
-  headers:{
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic' + b64encode
-  },
-  body: JSON.stringify({
-      grant_type: 'authorization_code',
-      code: window.sessionStorage.getItem('authCode'),
-      redirect_uri: ruName
+
+//Grants token using auth code
+async function grantToken(){
+  return fetch('https://swipebay.serveo.net/token',{
+    method: 'POST',
+    headers:{
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({code: myStorage.getItem("authCode")})
+    .then(console.log("successful token"))
   })
-  });
-  if (!response.ok){
-  throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  console.log(response.json());
+
 }
 //Parses response and builds an HTML div variable stored in sessionStorage
 async function _cb_findItemsByKeywords(){

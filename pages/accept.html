@@ -9,7 +9,15 @@
     <script type = "text/javascript" src = "../scripts/main.js"></script>
 </head>
 </head>
-<body onload = "getAuthCode()">
+<body>
+    <script>
+    window.addEventListener("load", myInit, true); 
+    async function myInit(){
+        console.log("Hello");
+        await getAuthCode();
+        await grantToken();
+    }
+    </script>
      <!-- Container for entire page -->
      <div class="container border" style="height: 580px;">
         <div class="row justify-content-center">
@@ -18,7 +26,6 @@
             </div>
         </div>
         
-
         <div class="row justify-content-center my-4">
              <input class="form-control-lg input-lg" id = 
              "Search" type= "text" placeholder="Search for items..."     aria-label="default input example" input-padding-x="">
