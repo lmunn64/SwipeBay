@@ -73,7 +73,7 @@ app.get('/auth', cors(), (req, res) =>{
     res.send(authUrl);
 })
 
-app.post('/token', cors(),(req,res)=>{
+app.post('/token', cors(),(req, res)=>{
   res.set({
     "Access-Control-Allow-Origin": "*"
   });

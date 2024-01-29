@@ -51,12 +51,11 @@ function userAuth(){
 
 //Parses user authorization code from html on accept.html page after redirect from authorization page
 async function getAuthCode(){
-  var myStorage = window.sessionStorage
   var url =  window.location.href;
   const arra = url.split("=");
   const codearr = arra[1].split('&');
   const authCode = codearr[0];
-  myStorage.setItem("authCode", authCode);
+  return authCode;
 }
 
 //Grants token using auth code
