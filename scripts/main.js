@@ -57,8 +57,6 @@ async function getAuthCode(){
   const codearr = arra[1].split('&');
   const authCode = codearr[0];
   myStorage.setItem("authCode", authCode);
-  console.log("Successful code");
-  grantToken();
 }
 
 //Grants token using auth code
@@ -68,7 +66,7 @@ async function grantToken(){
     headers:{
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({code: myStorage.getItem("authCode")})
+    body: JSON.stringify({code: window.sessionStorage.getItem("authCode")})
     .then(console.log("successful token"))
   })
 
