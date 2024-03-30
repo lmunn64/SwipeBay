@@ -81,6 +81,15 @@ app.post('/search', cors(),(req,res)=>{
     })();
    
 })
+
+app.get('/key', cors(), (req, res) => {
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+  });
+  console.log(key);
+  res.send(key);
+})
+
 app.get('/auth', cors(), (req, res) =>{
   res.set({
     "Access-Control-Allow-Origin": "*",

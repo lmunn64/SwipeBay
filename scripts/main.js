@@ -1,14 +1,14 @@
 const { response } = require("express");
 
 // Define the API URL
-const key = 'LukeMunn-SwipeBay-PRD-a83712ee4-498c5642';
+var key
 const ruName = 'Luke_Munn-LukeMunn-SwipeB-fkbal'
 const client_secret = 'PRD-83712ee43d82-09b8-4b7d-9da3-5102';
 const b64encode = btoa(key+':'+client_secret);
 var keyword
 var url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&itemFilter.name=MaxPrice&itemFilter.value=10.00&itemFilter.paramName=Currency&itemFilter.paramValue=USD&paginationInput.entriesPerPage=6&outputSelector=pictureURLLarge'
-var JSONData
-var myStorage = window.sessionStorage;
+var JSONData;
+var isIndexPage = true;
 var filterarray = [
   {"name":"MaxPrice",
    "value":"25",
@@ -105,17 +105,30 @@ async function _cb_findItemsByKeywords(){
       createCards(pic, title, price, viewItem, temp)
     }
   }
-  myStorage.setItem("searchValue", temp.innerHTML);
+  window.sessionStorage.setItem("searchValue", temp.innerHTML);
   
   }
-
+function getKey(){
+    return fetch('https://swipebay.serveo.net/key')
+    .then((response)=> response.text())
+    .then((data)=> {
+      key = data
+    })
+}
 //Complete search function
 async function search(value){
+    await getKey() // sets local key to api key
+    console.log(key);
     keyword = value
     url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.3.1&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&paginationInput.entriesPerPage=8&outputSelector=PictureURLLarge'
     await getSearchData();
     await _cb_findItemsByKeywords();
-    window.location.assign("pages/swipe.html");
+    if(isIndexPage){
+      window.location.assign("./swipe.html");
+      isIndexPage = false;
+    }
+    else
+      window.location.assign("./swipe.html");
     console.log(JSONData)
   }
 
