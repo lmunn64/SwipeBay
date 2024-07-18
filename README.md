@@ -5,7 +5,7 @@ Welcome to SwipeBay! Sign in and search for an item through eBay's production AP
 
 ### Specs
 
-Built with Node/Express framework in JavaScript. Runs locally on my desktop for testing and security purposes.
+Built with Node/Express framework in JavaScript. Website and server runs locally on my desktop for testing and security purposes.
 
 <!-- USAGE EXAMPLES -->
 ## Screenshots
