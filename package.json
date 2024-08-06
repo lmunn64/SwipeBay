@@ -2,8 +2,9 @@
   "name": "swipebay",
   "version": "1.0.0",
   "description": "Project created in order to learn and develop my skills in JavaScript and API usages.\r ### Idea\r Create a novel website using the Ebay production API to allow users to sign-in, search, filter and swipe left or right between items they want and items they don't want.",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
+    "start" : "node scripts/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

@@ -6,7 +6,7 @@ const ruName = 'Luke_Munn-LukeMunn-SwipeB-fkbal'
 const client_secret = 'PRD-83712ee43d82-09b8-4b7d-9da3-5102';
 const b64encode = btoa(key+':'+client_secret);
 var keyword
-var url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&itemFilter.name=MaxPrice&itemFilter.value=10.00&itemFilter.paramName=Currency&itemFilter.paramValue=USD&paginationInput.entriesPerPage=6&outputSelector=pictureURLLarge'
+var url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&itemFilter.name=MaxPrice&itemFilter.value=10.00&itemFilter.paramName=Currency&itemFilter.paramValue=USD&paginationInput.entriesPerPage=6&outputSelector=pictureURLLarge' 
 var JSONData;
 var isIndexPage = true;
 var filterarray = [
@@ -26,7 +26,7 @@ var filterarray = [
 
 // Make a GET request
 function getSearchData(){
-  return fetch('https://swipebay.serveo.net/search',{
+  return fetch('http://127.0.0.1:3000/search',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ function getSearchData(){
 
 //Fetches and redirects to user authorization URL that allows users to authorize app to use their data.
 function userAuth(){
-  return fetch('https://swipebay.serveo.net/auth')
+  return fetch('http://127.0.0.1:3000/auth')
   .then((response)=> response.text())
   .then((data)=> {
     window.location.assign(data);
@@ -51,7 +51,7 @@ function userAuth(){
 
 //getUser
 function getUser(){
-  return fetch('https://swipebay.serveo.net/userInfo',{
+  return fetch('http://127.0.0.1:3000/userInfo',{
     method: 'POST'
   })
   .then((response)=> response.text())
@@ -78,7 +78,7 @@ async function getAuthCode(){
 
 //Grants token using auth code
 async function grantToken(code){
-  return fetch('https://swipebay.serveo.net/token',{
+  return fetch('http://127.0.0.1:3000/token',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
@@ -90,7 +90,7 @@ async function grantToken(code){
 
 //Parses response and builds an HTML div variable stored in sessionStorage
 async function _cb_findItemsByKeywords(){
-  var items = JSONData.findItemsByKeywordsResponse[0].searchResult[0].item || [];
+  var items = JSONData.findItemsAdvancedResponse[0].searchResult[0].item || [];
   var temp = document.createElement('div')
   for (var i = 0; i < items.length; i++){
     var item = items[i]
@@ -100,16 +100,27 @@ async function _cb_findItemsByKeywords(){
     }
     else{var pic = item.pictureURLLarge;}
     var viewItem = item.viewItemURL;
-    var price = "$" + item.sellingStatus[0].convertedCurrentPrice[0]["__value__"];
+    
+    var bids = -1
+    var timeLeft = -1
+
+    if(item.listingInfo[0].listingType == "Auction" || item.listingInfo[0].listingType== "AuctionWithBIN"){
+      bids = item.sellingStatus[0].bidCount
+      timeLeft = decodeTimeLeft(String(item.sellingStatus[0].timeLeft))
+    }
+    //sets price to 2 decimals
+    var fixedPrice = parseFloat(item.sellingStatus[0].convertedCurrentPrice[0]["__value__"]).toFixed(2)
+
+    var price = "$" + fixedPrice;
     if (title != null && viewItem != null) {
-      createCards(pic, title, price, viewItem, temp)
+      createCards(pic, title, price, viewItem, temp, bids, timeLeft)
     }
   }
   window.sessionStorage.setItem("searchValue", temp.innerHTML);
   
   }
 function getKey(){
-    return fetch('https://swipebay.serveo.net/key')
+    return fetch('http://127.0.0.1:3000/key')
     .then((response)=> response.text())
     .then((data)=> {
       key = data
@@ -118,9 +129,15 @@ function getKey(){
 //Complete search function
 async function search(value){
     await getKey() // sets local key to api key
-    console.log(key);
     keyword = value
-    url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.3.1&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&paginationInput.entriesPerPage=8&outputSelector=PictureURLLarge'
+    if(document.querySelector("#category").value){
+      categoryId = document.querySelector("#category").value
+      url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsAdvanced&SERVICE-VERSION=1.3.1&SECURITY-APPNAME=' + key + '&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD=true&keywords=' + keyword + '&categoryId=' + categoryId + '&paginationInput.entriesPerPage=8&outputSelector=PictureURLLarge'
+    }
+    else{
+      url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsAdvanced&SERVICE-VERSION=1.3.1&SECURITY-APPNAME=' + key + '&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD=true&keywords=' + keyword + '&paginationInput.entriesPerPage=8&outputSelector=PictureURLLarge'
+    }
+
     await getSearchData();
     await _cb_findItemsByKeywords();
     if(isIndexPage){
@@ -131,9 +148,39 @@ async function search(value){
       window.location.assign("./swipe.html");
     console.log(JSONData)
   }
+function changeCategoryText(category){
+    document.querySelector("#category").value = category.value
+    document.querySelector('#categoryButton').innerHTML = category.innerHTML
+}
+
+//Takes time code of how much time left there is for a listing and returns a readable time
+function decodeTimeLeft(timeCode){
+  timeCodeArr = timeCode.split("")
+  tempString = ""
+  newArr = []
+  for(i = 0; i < timeCodeArr.length; i++){
+    if(!isNaN(timeCodeArr[i])){
+      tempString += timeCodeArr[i]
+      console.log(tempString)
+    }
+    else if(tempString){
+      newArr.push(tempString)
+      console.log(newArr)
+      tempString = ""
+    }
+  }
+  if (newArr[0]){
+    return newArr[0] + "d" + newArr[1] + " h" + " left"
+  }
+  if(newArr[1]){
+    return newArr[1] + "h" + newArr[2] + " m" + " left"
+  }
+  else
+    return newArr[2] + "m" + newArr[3] + " s" + " left"
+}
 
 // Function to create separate Bootstrap cards for each item
-  async function createCards(pic, title, price, url, container){
+  async function createCards(pic, title, price, url, container, bids, time){
     var divCard = document.createElement("div");
     divCard.setAttribute("class", "card");
 
@@ -145,23 +192,81 @@ async function search(value){
 
     var cardBody = document.createElement("div");
     cardBody.setAttribute("class", "card-body");
+    cardBody.setAttribute("text-align", "center");
 
-    var cardText = document.createElement("p");
+    var buttonGroup = document.createElement("div");
+    buttonGroup.setAttribute("class" , "text-center");
+
+    var buttonBody = document.createElement("div");
+    buttonBody.setAttribute("class", "col-md-12")
+
+    var link = document.createElement("a")
+    link.setAttribute("href", url);
+    link.setAttribute("class", "btn btn-outline-primary btn-sm");
+    link.innerText = "Go to Item"
+
+    buttonBody.append(link)
+
+    var buttonBody2 = document.createElement("div");
+    buttonBody2.setAttribute("class", "col-md-12")
+
+    var trackButton = document.createElement("button")
+    trackButton.setAttribute("class", "btn btn-primary btn-lg my-2");
+    trackButton.innerText = "Track"
+
+    buttonBody2.append(trackButton);
+    
+    buttonGroup.append(buttonBody2);
+    buttonGroup.append(buttonBody);
+
+    var priceDiv = document.createElement("div");
+    priceDiv.setAttribute("class", "my-2")
+
+    var listingTypeText = document.createElement("p");
+    listingTypeText.setAttribute("class", "card-text")
+    listingTypeText.setAttribute("style", "margin-top : 0")
+    listingTypeText.setAttribute("style", "font-weight : 100")
+    listingTypeText.setAttribute("style", "color : grey")
+
+    if(bids != -1){
+      listingTypeText.innerText = "Bids: " + bids + " · " + time
+    }
+    else
+      listingTypeText.innerText = "Buy It Now"
+
+    var cardText = document.createElement("h3");
     cardText.setAttribute("class","card-text");
+    cardText.setAttribute("style", "margin-bottom : 0px")
+    cardText.style.fontFamily = "Century Gothic"
+    cardText.setAttribute("style", "font-weight : 850")
+
     cardText.innerText = price;
 
     var cardTitle = document.createElement("h5");
     cardTitle.setAttribute("class","card-title");
+    cardTitle.style.fontFamily = "Verdana"
+
+
+
     cardTitle.innerText = title;
 
-    var link = document.createElement("a")
-    link.setAttribute("href", url);
-    link.setAttribute("class", "btn btn-outline-primary");
-    link.innerText = "Go to Item"
-    
+
+
+    // var track = document.createElement("a")
+    // track.setAttribute("class", "btn btn-outline-primary");
+    // track.setAttribute("")
+    // track.innerText = "Track Item"
+
     cardBody.append(cardTitle);
-    cardBody.append(cardText);
-    cardBody.append(link);
+
+    priceDiv.append(cardText);
+    priceDiv.append(listingTypeText);
+    
+
+    cardBody.append(priceDiv);
+    cardBody.append(buttonGroup);
+  
+  
     
 
     divCard.append(cardBody);
@@ -169,4 +274,3 @@ async function search(value){
     container.appendChild(divCard); 
     console.log(divCard.innerHTML)
   }
-  
