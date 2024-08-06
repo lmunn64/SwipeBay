@@ -170,13 +170,13 @@ function decodeTimeLeft(timeCode){
     }
   }
   if (newArr[0]){
-    return newArr[0] + "d" + newArr[1] + " h" + " left"
+    return newArr[0] + "d " + newArr[1] + "h" + " left"
   }
   if(newArr[1]){
-    return newArr[1] + "h" + newArr[2] + " m" + " left"
+    return newArr[1] + "h " + newArr[2] + "m" + " left"
   }
   else
-    return newArr[2] + "m" + newArr[3] + " s" + " left"
+    return newArr[2] + "m " + newArr[3] + "s" + " left"
 }
 
 // Function to create separate Bootstrap cards for each item

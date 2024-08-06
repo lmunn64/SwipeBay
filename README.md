@@ -9,7 +9,7 @@ Built with Node/Express framework in JavaScript. Website and server runs locally
 
 <!-- USAGE EXAMPLES -->
 ## Screenshots
-<p align = "center"><img src = "images/SearchSS.jpg"/></p>
+<p align = "center"><img src = "images/SearchSS2.jpg"/></p>
 
 
 
