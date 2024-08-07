@@ -22,7 +22,7 @@ const scopes = ['https://api.ebay.com/oauth/api_scope',
 ];
 
 var keyword = ''
-var url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME='+api_key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&itemFilter.name=MaxPrice&itemFilter.value=10.00&itemFilter.paramName=Currency&itemFilter.paramValue=USD&paginationInput.entriesPerPage=6&outputSelector=pictureURLLarge'
+var url 
 var JSONData
 var authToken;
 
@@ -80,7 +80,7 @@ app.post('/search', cors(),(req,res)=>{
     (async () => {
       const response = await fetch(url);
       let data = await response.json();
-      console.log(JSON.stringify(data))
+      console.log(url)
        res.json(
         data
     );
