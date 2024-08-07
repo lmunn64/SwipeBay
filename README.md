@@ -1,7 +1,7 @@
 <!-- ABOUT THE PROJECT -->
-## About The Project
+## SwipeBay
 
-Welcome to SwipeBay! Sign in and search for an item through eBay's production API. Users can swipe through the results with a novel carousel effect. This project was created to learn usages of APIs and develop my skills in JavaScript. 
+Welcome to SwipeBay! This is a web application supported by the eBay Finding API to search for and track specific items. The server queries the eBay Finding API and displays results through a novel carousel effect.
 
 ### Specs
 
