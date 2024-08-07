@@ -124,12 +124,15 @@ function getKey(){
     .then((response)=> response.text())
     .then((data)=> {
       key = data
+      console.log(data)
     })
 }
 //Complete search function
 async function search(value){
     await getKey() // sets local key to api key
+
     keyword = value
+
     if(document.querySelector("#category").value){
       categoryId = document.querySelector("#category").value
       url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsAdvanced&SERVICE-VERSION=1.3.1&SECURITY-APPNAME=' + key + '&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD=true&keywords=' + keyword + '&categoryId=' + categoryId + '&paginationInput.entriesPerPage=8&outputSelector=PictureURLLarge'
@@ -148,6 +151,7 @@ async function search(value){
       window.location.assign("./swipe.html");
     console.log(JSONData)
   }
+
 function changeCategoryText(category){
     document.querySelector("#category").value = category.value
     document.querySelector('#categoryButton').innerHTML = category.innerHTML

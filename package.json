@@ -4,7 +4,7 @@
   "description": "Project created in order to learn and develop my skills in JavaScript and API usages.\r ### Idea\r Create a novel website using the Ebay production API to allow users to sign-in, search, filter and swipe left or right between items they want and items they don't want.",
   "main": "main.js",
   "scripts": {
-    "start" : "node scripts/main.js",
+    "start": "node scripts/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "ebay-oauth-nodejs-client": "^1.2.2",
     "express": "^4.18.2",
     "jquery": "^3.7.1"
