@@ -26,13 +26,13 @@ var url
 var JSONData
 var authToken;
 
+const app = express();
 
-
-const app=express();
+const database = require("./database.js")
 const bodyParser = require('body-parser');
+
 const PORT=3000;
 const cors=require('cors');
-console.log(api_key)
 app.use(cors())
 
 // Middleware
@@ -44,12 +44,58 @@ const options = {
 app.use(cors(options))
 
 const EbayAuthToken = require('ebay-oauth-nodejs-client');
+const { data } = require('jquery');
 
 const ebayAuthToken = new EbayAuthToken({
     clientId: api_key,
     clientSecret: client_secret,
     redirectUri: ru_name
 });
+
+//Add user to local database
+app.post("/addUser", async (req, res) => {
+  try{
+    //Check if response body contains data
+    if(!res.body){
+      const msg = "POST: Bad request: No data provided.";
+      console.log(msg);
+      return res.status(400).send({error:msg})
+    }
+
+    //Check if table exists
+    const [tableExists] = await database.query("SHOW TABLES LIKE 'users'");
+    if(tableExists.length === 0){
+      const msg = "POST: Table does not exist.";
+      console.log(msg);
+      return res.status(404).send({error:msg})
+    }
+
+    //Check if user exists
+    const usrnm = req.body.userName; 
+    const [userExists] = database.query("SELECT * FROM users WHERE userName = ?", [usrnm]);
+    if(userExists.length > 0){
+      const msg = "POST: User already exists";    
+      console.log(msg);
+      return res.status(409).send({error:msg})
+    }
+
+    //Add user
+    const {userName, email, firstName, lastName} = req.body;
+    const insertSQL = "INSERT INTO users (userId, email, firstName, lastName) VALUES (?, ?, ?, ?)";
+    const insertResult = await database.query(insertSQL, [userName, email, firstName, lastName])
+
+    const msg = "POST: Successfully added user";    
+    console.log(msg);
+    return res.status(200).send({success:msg})
+    
+    } catch(err) {
+      const msg = "POST: An ERROR occurred in Post"+err;
+      console.error(msg);
+      res.status(500).send({error:msg});
+    }
+  
+})
+
 
 app.post('/userInfo', cors(), (req,res)=>{
   res.set({
@@ -113,15 +159,32 @@ app.post('/token', cors(),(req, res)=>{
   console.log(req.body.code);
   ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', req.body.code).then((data) => { // eslint-disable-line no-undef
       var response = JSON.parse(data);
+      var tokenSet = [response.access_token, response.refresh_token];
       authToken = response.access_token;
-      console.log(authToken);
-      res.send(authToken);
+      console.log(tokenSet);
+      res.send(tokenSet);
     }).catch((error) => {
       console.log(error);
       console.log(`Error to get Access token :${JSON.stringify(error)}`);
     });
 })
 
+app.post('/refreshToken', cors(),(req, res)=>{
+  res.set({
+    "Access-Control-Allow-Origin": "*"
+  });
+
+  console.log(req.body.code);
+  ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', req.body.code).then((data) => { // eslint-disable-line no-undef
+      var response = JSON.parse(data);
+      authToken = response.access_token;
+      console.log(response);
+      res.send(authToken);
+    }).catch((error) => {
+      console.log(error);
+      console.log(`Error to get Access token :${JSON.stringify(error)}`);
+    });
+})
 app.listen(PORT,()=>{
   console.log(`Server running on port ${PORT}`)
 })

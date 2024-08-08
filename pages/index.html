@@ -31,6 +31,9 @@
                 margin: -15px 0px 0px 0px;
                
             }
+            .form-control{
+                border-radius: 20px
+            }
             </style>
     </head>
 
@@ -70,7 +73,17 @@
 
                 </div>
             </div>
-            
+            <div class = "btn-group btn-group-toggle mx-1" data-toggle = "buttons">
+                <button id = "All" class = "btn btn-outline-secondary btn-sm"  type = "button">
+                    <input type ="radio" name = "options" id = "LT_all" autocomplete="off">All
+                </button>
+                <button id = "Auction" class = "btn btn-outline-secondary btn-sm "  type = "button">
+                    <input type ="radio" name = "options" id = "LT_auction" autocomplete="off" >Auction
+                </button>
+                <button id = "BIN" class = "btn btn-outline-secondary btn-sm "  type = "button">
+                    <input type ="radio" name = "options" id = "LT_buyitnow" autocomplete="off" >Buy It Now
+                </button>
+                </div>
         </div>
         <div class="row justify-content-center my-4">
              <input class="form-control form-control-lg col-lg-3 col-md-6 col-sm-8 col-8" id = 

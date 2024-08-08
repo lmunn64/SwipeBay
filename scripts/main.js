@@ -27,7 +27,7 @@ var itemFilter = [
 
   // Loads saved search cards HTML and injects into Slick swipe carousel
   onload = () => {
-      if(searchResults){
+      if(searchResults){ //if on swipe page and has results
       var divContainer = document.getElementById('swipe');
       divContainer.innerHTML = searchResults;
       swipeFunction()
@@ -40,6 +40,9 @@ var itemFilter = [
         sorry.setAttribute("style", "font-weight : 800")
         sorry.innerText ="Sorry, there are no results for your search..."
         mainDiv.append(sorry)
+      }
+      if(localStorage.get("authCode")){
+
       }
       listingTypeToggle()
   }
@@ -108,7 +111,7 @@ function getUser(){
     $email = $xml.find("Email");
     window.sessionStorage.setItem('userId', $user.text());
     // window.sessionStorage.setItem('Email', $email.text());
-    document.getElementById('user').innerHTML = window.sessionStorage.getItem('userId')
+    // document.getElementById('user').innerHTML = window.sessionStorage.getItemuserId')
   })
   }
 
@@ -180,6 +183,7 @@ function getCategory(){
   else
     return ``
 }
+
 function getListingType(){
   listingType = document.querySelector("#LT_auction")
   if(document.querySelector("#Auction").classList.contains("active")){
@@ -193,6 +197,7 @@ function getListingType(){
   localStorage.setItem("LTToggle", 0)
   return ``
 }
+
 //Complete search function
 async function search(value){
     await getKey() // sets local key to api key
