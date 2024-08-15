@@ -107,6 +107,7 @@ async function getUser(){
     $xml = $(xmlReq);
     $user = $xml.find("UserID");
     $email = $xml.find("Email");
+    console.log($email.text())
     window.sessionStorage.setItem('userId', $user.text());
     window.sessionStorage.setItem('Email', $email.text());
 
