@@ -96,8 +96,9 @@ app.post("/addUser", async (req, res) => {
   
 })
 
-
 app.post('/userInfo', cors(), (req,res)=>{
+  console.log('/userInfo\n')
+  console.log('Auth Token: ' + authToken)
   res.set({
     "Access-Control-Allow-Origin": "*",
     });
@@ -131,10 +132,10 @@ app.post('/search', cors(),(req,res)=>{
         data
     );
     })();
-   
 })
 
 app.get('/key', cors(), (req, res) => {
+  console.log("/key\n")
   res.set({
     "Access-Control-Allow-Origin": "*",
   });
@@ -143,6 +144,7 @@ app.get('/key', cors(), (req, res) => {
 })
 
 app.get('/auth', cors(), (req, res) =>{
+  console.log("/auth\n")
   res.set({
     "Access-Control-Allow-Origin": "*",
   });
@@ -155,12 +157,13 @@ app.post('/token', cors(),(req, res)=>{
   res.set({
     "Access-Control-Allow-Origin": "*"
   });
-
-  console.log(req.body.code);
+  console.log("/token\n")
+  // console.log(req.body.code);
   ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', req.body.code).then((data) => { // eslint-disable-line no-undef
       var response = JSON.parse(data);
       var tokenSet = [response.access_token, response.refresh_token];
       authToken = response.access_token;
+      console.log(response)
       console.log(tokenSet);
       res.send(tokenSet);
     }).catch((error) => {

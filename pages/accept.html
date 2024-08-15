@@ -15,6 +15,7 @@
         .form-control{
             margin-right: 3px;
             margin-left : 3px;
+            font-family: 'Arial';
         }
         #Welcome {
             font-weight: 850;
@@ -53,8 +54,8 @@
     async function myInit(){
         const authCode = await getAuthCode();
         console.log(authCode);
-        grantToken(authCode);
-        getUser();
+        token = await grantToken(authCode);
+        userId = await getUser();
     }
     </script>
      <!-- Container for entire page -->
@@ -75,11 +76,11 @@
              <input class="form-control input-lg col-lg-2 col-md-2 col-sm-2 col-2 my-2" id = 
              "firstname" type= "text" placeholder="first name"     aria-label="default input example" input-padding-x="">
              <input class="form-control input-lg col-lg-2 col-md-2 col-sm-2 col-2 my-2 " id = 
-             "lastname" type= "text" placeholder="last name"     aria-label="default input example" input-padding-x="">
+             "lastname" type= "text" placeholder="last name"   aria-label="default input example" input-padding-x="">
         </div>   
         
         <div class="row justify-content-center">
-            <button class="btn btn-primary" id = "submit" type = "button" onclick="search(Search.value)">Enter</button>
+            <button class="btn btn-primary" id = "submit" type = "button" onclick="search(firstname.value, lastname.value)">Enter</button>
        </div> 
 
     </div>
