@@ -181,7 +181,7 @@ app.post('/refreshToken', cors(),(req, res)=>{
   ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', req.body.code).then((data) => { // eslint-disable-line no-undef
       var response = JSON.parse(data);
       authToken = response.access_token;
-      console.log(response);
+      
       res.send(authToken);
     }).catch((error) => {
       console.log(error);

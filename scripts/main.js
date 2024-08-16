@@ -139,6 +139,9 @@ async function grantToken(code){
     },
     body: JSON.stringify({code: code})  
   })
+  .then((response)=>{
+    sessionStorage.setItem("refresh_token", response[1])
+  })
   .then(console.log("Successful token"))
 }
 
@@ -228,6 +231,7 @@ async function search(value){
 async function sendNewUser(firstName, lastName){
   email = sessionStorage.getItem("user_email")
   userName = localStorage.getItem("last_user")
+  refresh_token = sessionStorage.getItem("refresh_token")
   return fetch('http://127.0.0.1:5500/addUser', {
     method : 'POST',
     headers:{
@@ -237,7 +241,8 @@ async function sendNewUser(firstName, lastName){
                           email: email, 
                           firstName: firstName, 
                           lastName: lastName,
-                          refresh_token: refresh_token})
+                          refresh_token : refresh_token
+                          })
     })
   .then((response))
   .then(window.location.assign("./index.html"))
@@ -265,7 +270,6 @@ function setLogInDiv(isLoggedIn){
     div.appendChild(text)
     div.appendChild(user)
 
-    container.appendChild(div)
   }
   else{
     div.setAttribute("class", "fixed-bottom my-4")
@@ -296,7 +300,7 @@ function setLogInDiv(isLoggedIn){
     div.appendChild(text)
     div.appendChild(user)
     div.appendChild(buttonDiv)
-    body.appendChild(div)
+
   }
 }
 //Takes time code of how much time left there is for a listing and returns a readable time
