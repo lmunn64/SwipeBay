@@ -28,7 +28,6 @@ var itemFilter = [
   // Loads saved search cards HTML and injects into Slick swipe carousel
 onload = () => {
     sessionStorage.clear()
-    localStorage.clear()
     if(searchResults){ //if on swipe page and has results
     console.log(window.location.href)
     var divContainer = document.getElementById('swipe');

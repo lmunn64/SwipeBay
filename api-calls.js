@@ -56,7 +56,8 @@ const ebayAuthToken = new EbayAuthToken({
 app.post("/addUser", cors(), async (req, res) => {
   try{
     //Check if response body contains data
-    if(!res.body){
+    console.log(req.body)
+    if(!req.body){
       const msg = "POST: Bad request: No data provided.";
       console.log(msg);
       return res.status(400).send({error:msg})
@@ -69,16 +70,20 @@ app.post("/addUser", cors(), async (req, res) => {
       console.log(msg);
       return res.status(404).send({error:msg})
     }
+    console.log("POST: Table does exist.");
 
     //Check if user exists
     const usrnm = req.body.userName; 
-    const [userExists] = database.query("SELECT * FROM users WHERE userName = ?", [usrnm]);
-    if(userExists.length > 0){
+  
+    const userExists = database.query("SELECT * FROM users WHERE userName = ?", [usrnm]);
+    console.log("POST: User doesn't exist.");
+    if(userExists){
       const msg = "POST: User already exists";    
       console.log(msg);
       return res.status(409).send({error:msg})
     }
-
+    console.log("POST: User doesn't exist.");
+    
     //Add user
     const {userName, email, firstName, lastName, refresh_token} = req.body;
     const insertSQL = "INSERT INTO users (userName, email, firstName, lastName, refresh_token) VALUES (?, ?, ?, ?, ?)";
@@ -89,7 +94,7 @@ app.post("/addUser", cors(), async (req, res) => {
     return res.status(200).send({success:msg})
     
     } catch(err) {
-      const msg = "POST: An ERROR occurred in Post"+err;
+      const msg = "POST: An ERROR occurred in Post "+err;
       console.error(msg);
       res.status(500).send({error:msg});
     }
