@@ -229,11 +229,11 @@ async function search(value){
     console.log(JSONData)
 }
 
-async function sendNewUser(firstName, lastName){
+function sendNewUser(firstName, lastName){
   email = sessionStorage.getItem("user_email")
   userName = localStorage.getItem("last_user")
   refresh_token = sessionStorage.getItem("refresh_token")
-  return fetch('http://127.0.0.1:5500/addUser', {
+  return fetch('http://127.0.0.1:3000/addUser', {
     method : 'POST',
     headers:{
       'Content-Type' : 'application/json' 
@@ -245,7 +245,6 @@ async function sendNewUser(firstName, lastName){
                           refresh_token : refresh_token
                           })
     })
-  .then((response))
   .then(window.location.assign("./index.html"))
 }
 

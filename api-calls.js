@@ -53,7 +53,7 @@ const ebayAuthToken = new EbayAuthToken({
 });
 
 //Add user to local database
-app.post("/addUser", async (req, res) => {
+app.post("/addUser", cors(), async (req, res) => {
   try{
     //Check if response body contains data
     if(!res.body){
