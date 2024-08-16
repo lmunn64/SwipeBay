@@ -266,6 +266,7 @@ function setLogInDiv(isLoggedIn){
     text.innerText = "Logged in as:"
 
     var user = document.createElement("p")
+    user.setAttribute("class", "text-center")
     user.innerText = localStorage.getItem("last_user")
 
     div.appendChild(text)
