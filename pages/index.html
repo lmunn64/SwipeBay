@@ -37,8 +37,16 @@
             </style>
     </head>
 
-    <body onload = sessionStorage.clear() style="background-color: rgba(255, 255, 255, 0.151);">
-        
+    <body style="background-color: rgba(255, 255, 255, 0.151);">
+        <script>
+            window.addEventListener("load", myInit, true); 
+            async function myInit(){
+                sessionStorage.clear()
+                if(localStorage.getItem("last_user")){
+                    
+                }
+            }
+            </script>  
    <!-- Container for entire page -->
     
     <div class="container border" style="height: 580px;" id = "main">
@@ -95,11 +103,7 @@
        </div> 
 
     </div>
-    <div class = "fixed-bottom my-4">
-        <p class=" text-center" style="color:grey; font-size: small;">Allow swipeBay to use your eBay account to add items to watchlist and other things I might add!</p>
-        <div class="row justify-content-center">
-            <button class="btn btn-outline-primary btn-sm" id = "submit" role = "button" onclick="userAuth()">Log In</button>
-        </div> 
+    <div class = "fixed-bottom my-4" id = "bottom">
     </div>
    
 

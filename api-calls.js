@@ -25,7 +25,7 @@ var keyword = ''
 var url 
 var JSONData
 var authToken;
-
+var refresh_token
 const app = express();
 
 const database = require("./database.js")
@@ -80,9 +80,9 @@ app.post("/addUser", async (req, res) => {
     }
 
     //Add user
-    const {userName, email, firstName, lastName} = req.body;
-    const insertSQL = "INSERT INTO users (userId, email, firstName, lastName) VALUES (?, ?, ?, ?)";
-    const insertResult = await database.query(insertSQL, [userName, email, firstName, lastName])
+    const {userName, email, firstName, lastName, refresh_token} = req.body;
+    const insertSQL = "INSERT INTO users (userName, email, firstName, lastName, refresh_token) VALUES (?, ?, ?, ?, ?)";
+    const insertResult = await database.query(insertSQL, [userName, email, firstName, lastName, refresh_token])
 
     const msg = "POST: Successfully added user";    
     console.log(msg);
@@ -163,7 +163,7 @@ app.post('/token', cors(),(req, res)=>{
       var response = JSON.parse(data);
       var tokenSet = [response.access_token, response.refresh_token];
       authToken = response.access_token;
-      console.log(response)
+      refresh_token = response.refresh_token
       console.log(tokenSet);
       res.send(tokenSet);
     }).catch((error) => {

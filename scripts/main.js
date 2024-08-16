@@ -26,39 +26,45 @@ var itemFilter = [
   var searchResults = window.sessionStorage.getItem('searchValue');
 
   // Loads saved search cards HTML and injects into Slick swipe carousel
-  onload = () => {
-      if(searchResults){ //if on swipe page and has results
-      var divContainer = document.getElementById('swipe');
-      divContainer.innerHTML = searchResults;
-      swipeFunction()
-      }
-      else{
-        var mainDiv = document.getElementById("main")
-        var sorry = document.createElement("h4")
-        sorry.setAttribute("class", "text-center col-md-12 my")
-        sorry.setAttribute("style", "font-family : Century Gothic")
-        sorry.setAttribute("style", "font-weight : 800")
-        sorry.innerText ="Sorry, there are no results for your search..."
-        mainDiv.append(sorry)
-      }
-      // if(localStorage.getItem("authCode")){
+onload = () => {
+    sessionStorage.clear()
+    if(searchResults){ //if on swipe page and has results
+    console.log(window.location.href)
+    var divContainer = document.getElementById('swipe');
+    divContainer.innerHTML = searchResults;
+    swipeFunction()
+    }
+    else if(window.location == "swipe.html"){
+      var mainDiv = document.getElementById("main")
+      var sorry = document.createElement("h4")
+      sorry.setAttribute("class", "text-center col-md-12 my")
+      sorry.setAttribute("style", "font-family : Century Gothic")
+      sorry.setAttribute("style", "font-weight : 800")
+      sorry.innerText ="Sorry, there are no results for your search..."
+      mainDiv.append(sorry)
+    }
 
-      // }
-      listingTypeToggle()
-  }
-  function swipeFunction(){ 
-       $(document).ready(function(){ 
-      $('.swipe').slick({
-        infinite: true,
-        speed: 300,
-        slidesToShow: 1,
-        initialSlide: 1,
-        adaptiveHeight: false,
-        arrows: false,
-        mobileFirst: true
-      });
+    if(localStorage.getItem("last_user")){
+      setLogInDiv(1)
+    }
+    else
+      setLogInDiv(0)
+    listingTypeToggle()
+}
+
+function swipeFunction(){ 
+      $(document).ready(function(){ 
+    $('.swipe').slick({
+      infinite: true,
+      speed: 300,
+      slidesToShow: 1,
+      initialSlide: 1,
+      adaptiveHeight: false,
+      arrows: false,
+      mobileFirst: true
     });
-  }
+  });
+}
 
 function listingTypeToggle(){
   var code = localStorage.getItem("LTToggle")
@@ -108,8 +114,8 @@ async function getUser(){
     $user = $xml.find("UserID");
     $email = $xml.find("Email");
     console.log($email.text())
-    window.sessionStorage.setItem('userId', $user.text());
-    window.sessionStorage.setItem('Email', $email.text());
+    window.localStorage.setItem('last_user', $user.text());
+    window.sessionStorage.setItem('user_email', $email.text());
 
     // document.getElementById('user').innerHTML = window.sessionStorage.getItemuserId')
   })
@@ -220,22 +226,79 @@ async function search(value){
 }
 
 async function sendNewUser(firstName, lastName){
-
+  email = sessionStorage.getItem(user_email)
+  userName = localStorage.getItem(last_user)
   return fetch('http://127.0.0.1:5500/addUser', {
     method : 'POST',
     headers:{
       'Content-Type' : 'application/json' 
     },
-    body: JSON.stringify({})
-  })
+    body: JSON.stringify({userName: userName, 
+                          email: email, 
+                          firstName: firstName, 
+                          lastName: lastName,
+                          refresh_token: refresh_token})
+    })
   .then((response))
+  .then(window.location.assign("./index.html"))
 }
 
 function changeCategoryText(category){
     document.querySelector("#category").value = category.value
     document.querySelector('#categoryButton').innerHTML = category.innerHTML
 }
+function setLogInDiv(isLoggedIn){
+  var div = document.getElementById("bottom");
 
+  if(isLoggedIn){
+    div.setAttribute("class", "fixed-bottom my-4")
+
+    var text = document.createElement("p")
+    text.setAttribute("class", "text-center")
+    text.setAttribute("style", "font-size : small; color : grey")
+
+    text.innerText = "Logged in as:"
+
+    var user = document.createElement("p")
+    user.innerText = localStorage.getItem("last_user")
+
+    div.appendChild(text)
+    div.appendChild(user)
+
+    container.appendChild(div)
+  }
+  else{
+    div.setAttribute("class", "fixed-bottom my-4")
+
+    var text = document.createElement("p")
+    text.setAttribute("class", "text-center")
+
+    text.setAttribute("style", "font-size : small; color : grey")
+ 
+    
+    text.innerText = "Allow swipeBay to use your eBay account to add items to watchlist and other things I might add!"
+
+    var buttonDiv = document.createElement("div")
+    buttonDiv.setAttribute("class", "row justify-content-center")
+
+    var button = document.createElement("button")
+    button.setAttribute("class", "btn btn-outline-primary btn-sm")
+    button.setAttribute("id", "submit")
+    button.setAttribute("role", "button")
+    button.setAttribute("onclick", "userAuth()")
+    button.innerText = "Log In"
+
+    var user = document.createElement("p")
+    user.setAttribute("style", "color : grey")
+
+    buttonDiv.appendChild(button)
+
+    div.appendChild(text)
+    div.appendChild(user)
+    div.appendChild(buttonDiv)
+    body.appendChild(div)
+  }
+}
 //Takes time code of how much time left there is for a listing and returns a readable time
 function decodeTimeLeft(timeCode){
   timeCodeArr = timeCode.split("")
@@ -252,7 +315,6 @@ function decodeTimeLeft(timeCode){
       tempString = ""
     }
   }
-  
   if (Number.parseInt(newArr[0])){
     return newArr[0] + "d " + newArr[1] + "h" + " left"
   }
@@ -329,11 +391,7 @@ async function createCards(pic, title, price, url, container, bids, time){
   cardTitle.setAttribute("class","card-title");
   cardTitle.style.fontFamily = "Verdana"
 
-
-
   cardTitle.innerText = title;
-
-
 
   // var track = document.createElement("a")
   // track.setAttribute("class", "btn btn-outline-primary");
@@ -345,12 +403,8 @@ async function createCards(pic, title, price, url, container, bids, time){
   priceDiv.append(cardText);
   priceDiv.append(listingTypeText);
   
-
   cardBody.append(priceDiv);
   cardBody.append(buttonGroup);
-
-
-  
 
   divCard.append(cardBody);
 
