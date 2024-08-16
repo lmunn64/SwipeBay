@@ -226,8 +226,8 @@ async function search(value){
 }
 
 async function sendNewUser(firstName, lastName){
-  email = sessionStorage.getItem(user_email)
-  userName = localStorage.getItem(last_user)
+  email = sessionStorage.getItem("user_email")
+  userName = localStorage.getItem("last_user")
   return fetch('http://127.0.0.1:5500/addUser', {
     method : 'POST',
     headers:{
