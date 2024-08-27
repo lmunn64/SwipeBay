@@ -24,7 +24,8 @@ const scopes = ['https://api.ebay.com/oauth/api_scope',
 var keyword = ''
 var url 
 var JSONData
-var authToken;
+var user_id
+var access_token;
 var refresh_token
 const app = express();
 
@@ -75,17 +76,17 @@ app.post("/addUser", cors(), async (req, res) => {
     //Check if user exists
     const usrnm = req.body.userName; 
   
-    const userExists = database.query("SELECT * FROM users WHERE userName = ?", [usrnm]);
-    console.log("POST: User doesn't exist.");
-    if(userExists){
-      const msg = "POST: User already exists";    
-      console.log(msg);
-      return res.status(409).send({error:msg})
-    }
-    console.log("POST: User doesn't exist.");
-    
+    // const userExists = database.query("SELECT * FROM users WHERE userName = ?", [usrnm]);
+    // console.log("POST: User doesn't exist.");
+    // if(userExists){
+    //   const msg = "POST: User already exists";    
+    //   console.log(msg);
+    //   return res.status(409).send({error:msg})
+    // }
+    // console.log("POST: User doesn't exist.");
+
     //Add user
-    const {userName, email, firstName, lastName, refresh_token} = req.body;
+    const {userName, email, firstName, lastName} = req.body;
     const insertSQL = "INSERT INTO users (userName, email, firstName, lastName, refresh_token) VALUES (?, ?, ?, ?, ?)";
     const insertResult = await database.query(insertSQL, [userName, email, firstName, lastName, refresh_token])
 
@@ -101,9 +102,8 @@ app.post("/addUser", cors(), async (req, res) => {
   
 })
 
-app.post('/userInfo', cors(), (req,res)=>{
+app.get('/userInfo', cors(), (req,res)=>{
   console.log('/userInfo\n')
-  console.log('Auth Token: ' + authToken)
   res.set({
     "Access-Control-Allow-Origin": "*",
     });
@@ -119,7 +119,7 @@ app.post('/userInfo', cors(), (req,res)=>{
         body: '<?xml version="1.0" encoding="utf-8"?><GetUserRequest xmlns="urn:ebay:apis:eBLBaseComponents"> <RequesterCredentials><eBayAuthToken>'+authToken+'</eBayAuthToken></RequesterCredentials></GetUserRequest>'
       });
       let data = await response.text();
-      console.log(data)
+      
       res.send(data);
     })();
 })
@@ -162,36 +162,39 @@ app.post('/token', cors(),(req, res)=>{
   res.set({
     "Access-Control-Allow-Origin": "*"
   });
-  console.log("/token\n")
+  console.log("/token")
   // console.log(req.body.code);
   ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', req.body.code).then((data) => { // eslint-disable-line no-undef
       var response = JSON.parse(data);
-      var tokenSet = [response.access_token, response.refresh_token];
       authToken = response.access_token;
       refresh_token = response.refresh_token
-      console.log(tokenSet);
-      res.send(tokenSet);
+      console.log(refresh_token)
+      res.send("Successful token");
     }).catch((error) => {
       console.log(error);
       console.log(`Error to get Access token :${JSON.stringify(error)}`);
     });
 })
 
-app.post('/refreshToken', cors(),(req, res)=>{
+app.post('/updateUserToken', cors(), async (req, res)=>{
   res.set({
     "Access-Control-Allow-Origin": "*"
   });
-
-  console.log(req.body.code);
-  ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', req.body.code).then((data) => { // eslint-disable-line no-undef
-      var response = JSON.parse(data);
-      authToken = response.access_token;
+  user_id = req.body.user_id
+  //query get refresh_token from database by user id
+  const insertSQL = "SELECT refresh_token FROM users WHERE `userName` = ? VALUES (?)";
+  const rt = await database.query("SELECT refresh_token FROM users WHERE `userName` = ?", user_id)
+  refresh_token = rt
+  res.send(refresh_token)
+  // ebayAuthToken.getAccessToken('PRODUCTION', refresh_token, scopes).then((data) => { // eslint-disable-line no-undef
+  //     var response = JSON.parse(data);
+  //     access_token = response.access_token;
       
-      res.send(authToken);
-    }).catch((error) => {
-      console.log(error);
-      console.log(`Error to get Access token :${JSON.stringify(error)}`);
-    });
+  //     res.send(access_token);
+  //   }).catch((error) => {
+  //     console.log(error);
+  //     console.log(`Error to get Access token :${JSON.stringify(error)}`);
+  //   });
 })
 app.listen(PORT,()=>{
   console.log(`Server running on port ${PORT}`)

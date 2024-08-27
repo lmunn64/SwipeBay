@@ -26,7 +26,7 @@ var itemFilter = [
   var searchResults = window.sessionStorage.getItem('searchValue');
 
   // Loads saved search cards HTML and injects into Slick swipe carousel
-onload = () => {
+  onload = () => {
     sessionStorage.clear()
     if(searchResults){ //if on swipe page and has results
     console.log(window.location.href)
@@ -65,7 +65,6 @@ function swipeFunction(){
     });
   });
 }
-
 function listingTypeToggle(){
   var code = localStorage.getItem("LTToggle")
   if(code == 0)
@@ -76,7 +75,25 @@ function listingTypeToggle(){
   else
   document.querySelector("#BIN").classList.toggle("active")
 }
-
+function getRefreshToken(){
+  if(localStorage.getItem("last_user")){
+    var user_id = localStorage.getItem("last_user")
+    return fetch('http://127.0.0.1:3000/updateUserToken', {
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({user_id: user_id})
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data[0][0].refresh_token)
+      })
+  }
+  else
+    console.log("There is no previous user to fetch a request_token from")
+  
+}
 // Make a GET request
 function getSearchData(){
   return fetch('http://127.0.0.1:3000/search',{
@@ -105,7 +122,7 @@ function userAuth(){
 //getUser
 async function getUser(){
   return fetch('http://127.0.0.1:3000/userInfo',{
-    method: 'POST'
+    method: 'GET'
   })
   .then((response)=> response.text())
   .then((data)=> {
@@ -139,9 +156,7 @@ async function grantToken(code){
     },
     body: JSON.stringify({code: code})  
   })
-  .then((response)=>{
-    sessionStorage.setItem("refresh_token", response[1])
-  })
+  .then((response)=> response.json())
   .then(console.log("Successful token"))
 }
 
