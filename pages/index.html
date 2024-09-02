@@ -41,10 +41,10 @@
         <script>
             window.addEventListener("load", myInit, true); 
             async function myInit(){
-                sessionStorage.clear()
-                if(localStorage.getItem("last_user")){
-                    
-                }
+                if(localStorage.getItem("last_user"))
+                    setLogInDiv(1)
+                else
+                    setLogInDiv(0)
             }
             </script>  
    <!-- Container for entire page -->

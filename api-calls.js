@@ -118,7 +118,7 @@ app.get('/userInfo', cors(), (req,res)=>{
         body: '<?xml version="1.0" encoding="utf-8"?><GetUserRequest xmlns="urn:ebay:apis:eBLBaseComponents"> <RequesterCredentials><eBayAuthToken>'+authToken+'</eBayAuthToken></RequesterCredentials></GetUserRequest>'
       });
       let data = await response.text();
-      
+      console.log(data)
       res.send(data);
     })();
 })
@@ -174,7 +174,24 @@ app.post('/token', cors(),(req, res)=>{
       console.log(`Error to get Access token :${JSON.stringify(error)}`);
     });
 })
+app.post('/login', cors(), async(req, res)=>{
+  res.set({
+    "Access-Control-Allow-Origin": "*"
+  });
+  const user_id = req.body.user_id
+  password = req.body.password
+  //Check if user exists
+  
+  const userExists = database.query("SELECT * FROM users WHERE userName = ?", user_id);
+  if(userExists){
+    const msg = "POST: User already exists";    
+    console.log(msg);
+    return res.status(409).send({error:msg})
+  }
+  console.log("POST: User doesn't exist.");
 
+
+})
 app.post('/updateUserToken', cors(), async (req, res)=>{
   res.set({
     "Access-Control-Allow-Origin": "*"
@@ -195,6 +212,7 @@ app.post('/updateUserToken', cors(), async (req, res)=>{
   //     console.log(`Error to get Access token :${JSON.stringify(error)}`);
   //   });
 })
+
 app.listen(PORT,()=>{
   console.log(`Server running on port ${PORT}`)
 })

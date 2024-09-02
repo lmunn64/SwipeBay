@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accept</title>
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+        
+    <!-- Bootstrap bundle -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script type = "text/javascript" src = "../scripts/main.js"></script>
+    <style>
+        .form-control{
+            margin-right: 3px;
+            margin-left : 3px;
+            font-family: 'Arial';
+        }
+        #Welcome {
+            font-weight: 850;
+            font-family: 'Century Gothic';
+            color : rgb(229, 50, 56);
+            margin-right: 3px;
+            margin-left : 3px;
+        }
+        #to{
+            font-weight: 850;
+            font-family: 'Century Gothic';
+            color : rgb(0, 100, 210);
+            margin-right: 3px;
+            margin-left : 3px;
+        }
+        #swipebay{
+            font-weight: 850;
+            font-family: 'Century Gothic';
+            color : rgb(245, 175, 2);
+            margin-right: 3px;
+            margin-left : 3px;
+        }
+        #info{
+            font-weight: 850;
+            font-family: 'Century Gothic';
+            color : rgb(134, 184, 23);
+            margin-right: 3px;
+            margin-left : 3px;
+        }
+    </style>
+</head>
+</head>
+<body>
+    <script>
+    window.addEventListener("load", myInit, true); 
+    async function myInit(){
+        const authCode = await getAuthCode();
+        console.log(authCode);
+        token = await grantToken(authCode);
+        userId = await getUser();
+    }
+    </script>
+     <!-- Container for entire page -->
+    <div class="container border" style="height: 580px;">
+        <div class="row justify-content-center">
+            <div class ="col-lg-4 col-md-6 col-sm-8 col-8 my-2">
+               <img src="../images/swipeBay.png" class="img-fluid" alt="logo">
+            </div>
+        </div>
+        <div class = "row justify-content-center text-center my-2">
+            <h4 id = "Welcome">Login</h4><h4 id = to>to</h4> <h4 id = "swipebay"> SwipeBay</h4>
+        </div>
+
+        <h6 id = "info" class = "text-center">Please input your user id and password to get started</h6>
+
+        <div class="row justify-content-center">
+             <input class="form-control input-lg col-lg-2 col-md-2 col-sm-2 col-2 my-2 " id = 
+             "userid" type= "text" placeholder="user id"   aria-label="default input example" input-padding-x="">
+             <div class = "w-100"></div>
+             <input class="form-control input-lg col-lg-2 col-md-2 col-sm-2 col-2" id = 
+            "password" type= "text" placeholder="password"   aria-label="default input example" input-padding-x="">
+        </div>   
+    
+        
+        
+        <div class="row justify-content-center my-4">
+            <button class="btn btn-primary" id = "submit" type = "button" onclick="login(userid.value, password.value)">Login</button>
+            <div class = "w-100"></div>
+            <button class="btn btn-outline-primary btn-sm my-2" id = "submit" type = "button" onclick="userAuth()">Register with eBay</button>
+       </div> 
+
+    </div>
+
+    <!-- Bootstrap script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

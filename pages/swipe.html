@@ -33,6 +33,29 @@
 </head>
 
 <body>
+    <script>    
+    window.addEventListener("load", myInit, true); 
+    function myInit(){
+      var searchResults = window.sessionStorage.getItem('searchValue');
+      sessionStorage.clear()
+      if(searchResults){
+        console.log(window.location.href)
+        var divContainer = document.getElementById('swipe');
+        divContainer.innerHTML = searchResults;
+        swipeFunction()
+      }
+      else{
+        var mainDiv = document.getElementById("main")
+        var sorry = document.createElement("h4")
+        sorry.setAttribute("class", "text-center col-md-12 my")
+        sorry.setAttribute("style", "font-family : Century Gothic")
+        sorry.setAttribute("style", "font-weight : 800")
+        sorry.innerText ="Sorry, there are no results for your search..."
+        mainDiv.append(sorry)
+      }
+      listingTypeToggle()
+    }
+    </script>
     
     <!-- Container for entire page -->
     <div class="container border" style="height: 850px;" id = "main">

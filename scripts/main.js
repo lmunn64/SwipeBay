@@ -22,36 +22,7 @@ var itemFilter = [
    "paramValue":""},
   ];
 
-  //Onload functions
-  var searchResults = window.sessionStorage.getItem('searchValue');
-
-  // Loads saved search cards HTML and injects into Slick swipe carousel
-  onload = () => {
-    sessionStorage.clear()
-    if(searchResults){ //if on swipe page and has results
-    console.log(window.location.href)
-    var divContainer = document.getElementById('swipe');
-    divContainer.innerHTML = searchResults;
-    swipeFunction()
-    }
-    else if(window.location == "swipe.html"){
-      var mainDiv = document.getElementById("main")
-      var sorry = document.createElement("h4")
-      sorry.setAttribute("class", "text-center col-md-12 my")
-      sorry.setAttribute("style", "font-family : Century Gothic")
-      sorry.setAttribute("style", "font-weight : 800")
-      sorry.innerText ="Sorry, there are no results for your search..."
-      mainDiv.append(sorry)
-    }
-
-    if(localStorage.getItem("last_user")){
-      setLogInDiv(1)
-    }
-    else
-      setLogInDiv(0)
-    listingTypeToggle()
-}
-
+  
 function swipeFunction(){ 
       $(document).ready(function(){ 
     $('.swipe').slick({
@@ -65,6 +36,7 @@ function swipeFunction(){
     });
   });
 }
+
 function listingTypeToggle(){
   var code = localStorage.getItem("LTToggle")
   if(code == 0)
@@ -265,6 +237,7 @@ function changeCategoryText(category){
     document.querySelector("#category").value = category.value
     document.querySelector('#categoryButton').innerHTML = category.innerHTML
 }
+
 function setLogInDiv(isLoggedIn){
   var div = document.getElementById("bottom");
 
@@ -290,7 +263,7 @@ function setLogInDiv(isLoggedIn){
     button.setAttribute("id", "submit")
     button.setAttribute("role", "button")
     button.innerText = "Log Out"
-    button.setAttribute("onclick", "Logout()")
+    button.setAttribute("onclick", "logout()")
     
     buttonDiv.append(button)
 
@@ -316,7 +289,7 @@ function setLogInDiv(isLoggedIn){
     button.setAttribute("class", "btn btn-outline-primary btn-sm")
     button.setAttribute("id", "submit")
     button.setAttribute("role", "button")
-    button.setAttribute("onclick", "userAuth()")
+    button.setAttribute("onclick", "window.location.assign('./login.html')")
     button.innerText = "Log In"
 
     var user = document.createElement("p")
@@ -331,9 +304,23 @@ function setLogInDiv(isLoggedIn){
   }
 }
 
-function Logout(){
+function logout(){
   window.localStorage.clear("last_user")
   window.location.assign("./index.html")
+}
+function login(user_id, password){
+  return fetch('http://127.0.0.1:3000/login', {
+    method : 'POST',
+    headers:{
+      'Content-Type' : 'application/json' 
+    },
+    body: JSON.stringify({
+                          user_id: user_id,
+                          password, password
+                        })
+    })
+  .then((response)=>response.text())
+  .then((data) => console.log(data))
 }
 
 //Takes time code of how much time left there is for a listing and returns a readable time
