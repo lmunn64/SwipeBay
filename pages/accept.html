@@ -55,7 +55,8 @@
         const authCode = await getAuthCode();
         console.log(authCode);
         token = await grantToken(authCode);
-        userId = await getUser();
+        user_info = await getUser(authCode);
+        authCode = NULL
     }
     </script>
      <!-- Container for entire page -->

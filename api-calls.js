@@ -24,7 +24,7 @@ const scopes = ['https://api.ebay.com/oauth/api_scope',
 var keyword = ''
 var url ;
 var user_id;
-var access_token;
+var authToken;
 var refresh_token;
 const app = express();
 
@@ -101,7 +101,8 @@ app.post("/addUser", cors(), async (req, res) => {
   
 })
 
-app.get('/userInfo', cors(), (req,res)=>{
+app.post('/userInfo', cors(), (req,res)=>{
+  const auth_code = req.body.auth_code;
   console.log('/userInfo\n')
   res.set({
     "Access-Control-Allow-Origin": "*",
@@ -113,9 +114,9 @@ app.get('/userInfo', cors(), (req,res)=>{
           'X-EBAY-API-SITEID': '0',
           'X-EBAY-API-COMPATIBILITY-LEVEL': '967',
           'X-EBAY-API-CALL-NAME': 'GetUser',
-          'X-EBAY-API-IAF-TOKEN': authToken,
+          'X-EBAY-API-IAF-TOKEN': auth_code,
         },
-        body: '<?xml version="1.0" encoding="utf-8"?><GetUserRequest xmlns="urn:ebay:apis:eBLBaseComponents"> <RequesterCredentials><eBayAuthToken>'+authToken+'</eBayAuthToken></RequesterCredentials></GetUserRequest>'
+        body: '<?xml version="1.0" encoding="utf-8"?><GetUserRequest xmlns="urn:ebay:apis:eBLBaseComponents"> <RequesterCredentials><eBayAuthToken>'+auth_code+'</eBayAuthToken></RequesterCredentials></GetUserRequest>'
       });
       let data = await response.text();
       console.log(data)
