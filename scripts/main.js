@@ -243,10 +243,9 @@ async function search(value){
     console.log(JSONData)
 }
 
-function sendNewUser(firstName, lastName){
+function sendNewUser(firstName, lastName, password){
   email = sessionStorage.getItem("user_email")
   userName = localStorage.getItem("last_user")
-  refresh_token = sessionStorage.getItem("refresh_token")
   return fetch('http://127.0.0.1:3000/addUser', {
     method : 'POST',
     headers:{
@@ -254,9 +253,9 @@ function sendNewUser(firstName, lastName){
     },
     body: JSON.stringify({userName: userName, 
                           email: email, 
+                          password, password,
                           firstName: firstName, 
                           lastName: lastName,
-                          refresh_token : refresh_token
                           })
     })
   .then(window.location.assign("./index.html"))
@@ -281,10 +280,23 @@ function setLogInDiv(isLoggedIn){
     var user = document.createElement("p")
     user.setAttribute("class", "text-center")
     user.innerText = localStorage.getItem("last_user")
+    user.setAttribute("style", "font-size : small; color : grey")
+
+    var buttonDiv = document.createElement("div")
+    buttonDiv.setAttribute("class", "row justify-content-center")
+
+    var button = document.createElement("button")
+    button.setAttribute("class", "btn btn-outline-primary btn-sm")
+    button.setAttribute("id", "submit")
+    button.setAttribute("role", "button")
+    button.innerText = "Log Out"
+    button.setAttribute("onclick", "Logout()")
+    
+    buttonDiv.append(button)
 
     div.appendChild(text)
     div.appendChild(user)
-
+    div.appendChild(buttonDiv)
   }
   else{
     div.setAttribute("class", "fixed-bottom my-4")
@@ -318,6 +330,12 @@ function setLogInDiv(isLoggedIn){
 
   }
 }
+
+function Logout(){
+  window.localStorage.clear("last_user")
+  window.location.assign("./index.html")
+}
+
 //Takes time code of how much time left there is for a listing and returns a readable time
 function decodeTimeLeft(timeCode){
   timeCodeArr = timeCode.split("")

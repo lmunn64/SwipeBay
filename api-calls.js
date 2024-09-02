@@ -22,11 +22,10 @@ const scopes = ['https://api.ebay.com/oauth/api_scope',
 ];
 
 var keyword = ''
-var url 
-var JSONData
-var user_id
+var url ;
+var user_id;
 var access_token;
-var refresh_token
+var refresh_token;
 const app = express();
 
 const database = require("./database.js")
@@ -86,9 +85,9 @@ app.post("/addUser", cors(), async (req, res) => {
     // console.log("POST: User doesn't exist.");
 
     //Add user
-    const {userName, email, firstName, lastName} = req.body;
-    const insertSQL = "INSERT INTO users (userName, email, firstName, lastName, refresh_token) VALUES (?, ?, ?, ?, ?)";
-    const insertResult = await database.query(insertSQL, [userName, email, firstName, lastName, refresh_token])
+    const {userName, email, password, firstName, lastName} = req.body;
+    const insertSQL = "INSERT INTO users (userName, email, password, firstName, lastName, refresh_token) VALUES (?, ?, ?, ?, ?, ?)";
+    const insertResult = await database.query(insertSQL, [userName, email, password, firstName, lastName, refresh_token])
 
     const msg = "POST: Successfully added user";    
     console.log(msg);
