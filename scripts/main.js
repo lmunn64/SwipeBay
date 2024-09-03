@@ -133,10 +133,10 @@ async function grantToken(code){
     },
     body: JSON.stringify({code: code})  
   })
-  .then((response)=> response.json())
-  .then((data)=> {
-    console.log(data)
-    return data
+  .then((response)=> response.text())
+  .then((body)=> {
+    console.log(body)
+    return body
   })
 }
 

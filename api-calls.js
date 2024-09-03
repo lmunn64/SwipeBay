@@ -162,13 +162,14 @@ app.post('/token', cors(),(req, res)=>{
   res.set({
     "Access-Control-Allow-Origin": "*"
   });
-  console.log("Running /token...")
+  console.log("Running /token...\n")
   // console.log(req.body.code);
   ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', req.body.code).then((data) => { // eslint-disable-line no-undef
       var response = JSON.parse(data);
       access_token = response.access_token;
       refresh_token = response.refresh_token
       console.log(`Refresh Token: ${refresh_token}`)
+      console.log(`Access Token: ${access_token}`)
       res.send(access_token)
     }).catch((error) => {
       console.log(error);
