@@ -315,11 +315,14 @@ function setLogInDiv(isLoggedIn){
 }
 
 function logout(){
-  window.localStorage.clear("last_user")
+  window.localStorage.setItem("loggedIn", 0)
   window.location.assign("./index.html")
 }
-function login(user_id, password){
-  return fetch('http://127.0.0.1:3000/login', {
+
+async function login(user_id, password){
+  var loginData
+  try{
+    const response = await fetch('http://127.0.0.1:3000/login', {
     method : 'POST',
     headers:{
       'Content-Type' : 'application/json' 
@@ -329,10 +332,36 @@ function login(user_id, password){
                           password, password
                         })
     })
-  .then((response)=>response.text())
-  .then((data) => console.log(data))
+    if(response.ok){
+      window.localStorage.setItem("last_user", user_id)
+      window.localStorage.setItem("loggedIn", 1)
+      window.location.assign("./index.html")
+      console.log(loginData)
+    }
+    else{
+      throw new Error(response.status)
+    }
+  } catch (error){
+    console.error('Fetch', error)
+  }
 }
 
+function checkRegistered(email){
+  fetch('http://127.0.0.1:3000/userExist', {
+    method : 'POST',
+    headers : {
+      'Content-Type' : 'application/json'
+    },
+    body : JSON.stringify({
+                            email: email
+                          })
+  })
+  .then((response) => response.text())
+  .then((data) => {
+    console.log(data)
+    return data
+  })
+}
 //Takes time code of how much time left there is for a listing and returns a readable time
 function decodeTimeLeft(timeCode){
   timeCodeArr = timeCode.split("")

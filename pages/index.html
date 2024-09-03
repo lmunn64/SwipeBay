@@ -41,8 +41,11 @@
         <script>
             window.addEventListener("load", myInit, true); 
             async function myInit(){
-                if(localStorage.getItem("last_user"))
-                    setLogInDiv(1)
+                if(localStorage.getItem("last_user")) 
+                    if(parseInt(localStorage.getItem("loggedIn")))
+                        setLogInDiv(1)
+                    else
+                        setLogInDiv(0)
                 else
                     setLogInDiv(0)
             }

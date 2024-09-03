@@ -52,9 +52,17 @@
     <script>
     window.addEventListener("load", myInit, true); 
     async function myInit(){
-        const authCode = await getAuthCode();
-        access_token = await grantToken(authCode);
-        user_info = await getUser(access_token);
+        // const authCode = await getAuthCode();
+        // access_token = await grantToken(authCode);
+        // user_info = await getUser(access_token);
+        sessionStorage.setItem("email", "lmunn64@gmail.com")
+        var email = sessionStorage.getItem("email")
+        var registered = checkRegistered(email)
+        
+        if(!registered){
+            console.log("User already exists")
+            window.location.assign("./login.html")
+        }
         window.sessionStorage.setItem("access_token", access_token);
         authCode = NULL
         

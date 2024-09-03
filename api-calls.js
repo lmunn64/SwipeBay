@@ -116,7 +116,7 @@ app.post('/userInfo', cors(), (req,res)=>{
           'X-EBAY-API-CALL-NAME': 'GetUser',
           'X-EBAY-API-IAF-TOKEN': access_token,
         },
-        body: '<?xml version="1.0" encoding="utf-8"?><GetUserRequest xmlns="urn:ebay:apis:eBLBaseComponents"> <RequesterCredentials><eBayAuthToken>'+auth_code+'</eBayAuthToken></RequesterCredentials></GetUserRequest>'
+        body: '<?xml version="1.0" encoding="utf-8"?><GetUserRequest xmlns="urn:ebay:apis:eBLBaseComponents"> <RequesterCredentials><eBayAuthToken>'+access_token+'</eBayAuthToken></RequesterCredentials></GetUserRequest>'
       });
       let data = await response.text();
       console.log(`Requested User Data: \n ${data}`)
@@ -181,17 +181,50 @@ app.post('/login', cors(), async(req, res)=>{
     "Access-Control-Allow-Origin": "*"
   });
   const user_id = req.body.user_id
-  password = req.body.password
+  console.log(user_id)
+  const password = req.body.password
   //Check if user exists
   
-  const userExists = database.query("SELECT * FROM users WHERE userName = ?", user_id);
-  if(userExists){
-    const msg = "POST: User already exists";    
+  const userExists = await database.query("SELECT * FROM users WHERE userName = ?", [user_id]);
+  console.log(userExists[0].length)
+  if(userExists[0].length){
+    const msg = "POST: Username Correct";    
+    console.log(msg);
+    const passCheck = await database.query("SELECT * FROM users WHERE userName = ? AND  password = ?", [user_id, password]);
+    console.log(passCheck[0].length)
+    if(passCheck[0].length){
+      console.log(`Username and Password Correct\nLogged In as ${user_id}`)
+      res.send("0")
+    }
+    else{
+      const msg = "POST: Incorrect Password."
+      console.log(msg);
+      return res.status(409).send({error:msg})
+    }
+  }
+  else{
+    const msg = "POST: User doesn't exist."
     console.log(msg);
     return res.status(409).send({error:msg})
   }
-  console.log("POST: User doesn't exist.");
+})
 
+app.post("/userExist", cors(), async(req,res) =>{
+  res.set({
+    "Access-Control-Allow-Origin" : "*"
+  });
+  const email = req.body.email
+  const userExists = await database.query("SELECT * FROM users WHERE email = ?", [email])
+  if(userExists[0].length){
+    const msg = "Account exists"
+    console.log(msg)
+    res.send("0")
+  }
+  else{
+    const msg = "Account does not exist"
+    console.log(msg)
+    res.send("1")
+  }
 
 })
 app.post('/updateUserToken', cors(), async (req, res)=>{
