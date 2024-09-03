@@ -141,7 +141,10 @@ async function _cb_findItemsByKeywords(){
   var items = JSONData.findItemsAdvancedResponse[0].searchResult[0].item || [];
   var temp = document.createElement('div')
   for (var i = 0; i < items.length; i++){
-    var item = items[i]
+    //card id
+    var itemId = i;
+
+    var item = items[i];
     var title = item.title;
     if(item.pictureURLLarge == undefined){
       var pic = item.galleryURL;
@@ -161,7 +164,7 @@ async function _cb_findItemsByKeywords(){
 
     var price = "$" + fixedPrice;
     if (title != null && viewItem != null) {
-      createCards(pic, title, price, viewItem, temp, bids, timeLeft)
+      createCards(itemId, pic, title, price, viewItem, temp, bids, timeLeft)
     }
   }
   window.sessionStorage.setItem("searchValue", temp.innerHTML);
@@ -304,7 +307,6 @@ function setLogInDiv(isLoggedIn){
     div.appendChild(text)
     div.appendChild(user)
     div.appendChild(buttonDiv)
-
   }
 }
 
@@ -354,9 +356,11 @@ function decodeTimeLeft(timeCode){
 }
 
 // Function to create separate Bootstrap cards for each item
-async function createCards(pic, title, price, url, container, bids, time){
+async function createCards(card_id, pic, title, price, url, container, bids, time){
   var divCard = document.createElement("div");
   divCard.setAttribute("class", "card");
+  divCard.setAttribute("id", card_id)
+
   var img = document.createElement('img');
   img.setAttribute("src", pic);
   img.setAttribute("class", "card-img-top");
@@ -386,7 +390,7 @@ async function createCards(pic, title, price, url, container, bids, time){
   var trackButton = document.createElement("button")
   trackButton.setAttribute("class", "btn btn-primary btn-lg my-2");
   trackButton.innerText = "Track"
-
+  trackButton.setAttribute("onclick", `openFn(${card_id})`)
   buttonBody2.append(trackButton);
   
   buttonGroup.append(buttonBody2);
@@ -420,11 +424,6 @@ async function createCards(pic, title, price, url, container, bids, time){
   cardTitle.style.fontFamily = "Verdana"
 
   cardTitle.innerText = title;
-
-  // var track = document.createElement("a")
-  // track.setAttribute("class", "btn btn-outline-primary");
-  // track.setAttribute("")
-  // track.innerText = "Track Item"
 
   cardBody.append(cardTitle);
 

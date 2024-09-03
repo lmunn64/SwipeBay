@@ -11,6 +11,7 @@
     <!-- Bootstrap bundle -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script type = "text/javascript" src = "../scripts/main.js"></script>
+     <!-- #overlay and #popup styling courtesy of geeksforgeeks src = "https://www.geeksforgeeks.org/how-to-open-a-popup-on-click-using-javascript/" -->
     <style>
         img {
             width: 200px;
@@ -29,6 +30,31 @@
         .form-control{
                 border-radius: 20px
             }
+        
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        #popupTrack {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
         </style>
 </head>
 
@@ -116,12 +142,30 @@
         </div> 
         <div class="row justify-content-center my-4">
             <div class="card" style = "width: 25rem; height: 0cm">
-                <div class = 'swipe' id = 'swipe'> </div>
+                <div class = 'swipe' id = 'swipe'></div>
             </div>  
+            <div id = "overlay" class = "hidden" ></div>
+            <div id = "popupTrack" class = "hidden">
+                <p id = "popup_text"></p>
+                <button class = "btn btn-sm btn-primary" onclick="openFn()">
+                    Close
+                </button>
+            </div>
         </div>
         
     </div>
-        
+    <script>
+        function openFn(card_id){
+            const overlay = document.getElementById(`overlay`)
+            const popup = document.getElementById(`popupTrack`)
+            const text = document.getElementById(`popup_text`)
+            overlay.classList.toggle("hidden")
+            popup.classList.toggle("hidden")
+            text.innerText = card_id
+            popup.style.opacity = popup.style.opacity === "1" ? "0": "1";
+            console.log("openFn")
+        }
+    </script>
 
     <!-- Slick script for swiping functionality -->
     <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
