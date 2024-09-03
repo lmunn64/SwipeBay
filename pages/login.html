@@ -49,15 +49,7 @@
 </head>
 </head>
 <body>
-    <script>
-    window.addEventListener("load", myInit, true); 
-    async function myInit(){
-        const authCode = await getAuthCode();
-        console.log(authCode);
-        token = await grantToken(authCode);
-        userId = await getUser();
-    }
-    </script>
+    
      <!-- Container for entire page -->
     <div class="container border" style="height: 580px;">
         <div class="row justify-content-center">

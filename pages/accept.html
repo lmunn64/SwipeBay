@@ -53,10 +53,11 @@
     window.addEventListener("load", myInit, true); 
     async function myInit(){
         const authCode = await getAuthCode();
-        console.log(authCode);
-        token = await grantToken(authCode);
-        user_info = await getUser(authCode);
+        access_token = await grantToken(authCode);
+        user_info = await getUser(access_token);
+        window.sessionStorage.setItem("access_token", access_token);
         authCode = NULL
+        
     }
     </script>
      <!-- Container for entire page -->

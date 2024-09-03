@@ -24,7 +24,6 @@ const scopes = ['https://api.ebay.com/oauth/api_scope',
 var keyword = ''
 var url ;
 var user_id;
-var authToken;
 var refresh_token;
 const app = express();
 
@@ -54,6 +53,7 @@ const ebayAuthToken = new EbayAuthToken({
 
 //Add user to local database
 app.post("/addUser", cors(), async (req, res) => {
+  console.log("Running /addUser...\n")
   try{
     //Check if response body contains data
     console.log(req.body)
@@ -102,8 +102,8 @@ app.post("/addUser", cors(), async (req, res) => {
 })
 
 app.post('/userInfo', cors(), (req,res)=>{
-  const auth_code = req.body.auth_code;
-  console.log('/userInfo\n')
+  const access_token = req.body.access_token;
+  console.log('Running /userInfo....\n')
   res.set({
     "Access-Control-Allow-Origin": "*",
     });
@@ -114,12 +114,12 @@ app.post('/userInfo', cors(), (req,res)=>{
           'X-EBAY-API-SITEID': '0',
           'X-EBAY-API-COMPATIBILITY-LEVEL': '967',
           'X-EBAY-API-CALL-NAME': 'GetUser',
-          'X-EBAY-API-IAF-TOKEN': auth_code,
+          'X-EBAY-API-IAF-TOKEN': access_token,
         },
         body: '<?xml version="1.0" encoding="utf-8"?><GetUserRequest xmlns="urn:ebay:apis:eBLBaseComponents"> <RequesterCredentials><eBayAuthToken>'+auth_code+'</eBayAuthToken></RequesterCredentials></GetUserRequest>'
       });
       let data = await response.text();
-      console.log(data)
+      console.log(`Requested User Data: \n ${data}`)
       res.send(data);
     })();
 })
@@ -140,7 +140,7 @@ app.post('/search', cors(),(req,res)=>{
 })
 
 app.get('/key', cors(), (req, res) => {
-  console.log("/key\n")
+  console.log("Running /key...\n")
   res.set({
     "Access-Control-Allow-Origin": "*",
   });
@@ -149,7 +149,7 @@ app.get('/key', cors(), (req, res) => {
 })
 
 app.get('/auth', cors(), (req, res) =>{
-  console.log("/auth\n")
+  console.log("Running /auth...\n")
   res.set({
     "Access-Control-Allow-Origin": "*",
   });
@@ -162,14 +162,14 @@ app.post('/token', cors(),(req, res)=>{
   res.set({
     "Access-Control-Allow-Origin": "*"
   });
-  console.log("/token")
+  console.log("Running /token...")
   // console.log(req.body.code);
   ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', req.body.code).then((data) => { // eslint-disable-line no-undef
       var response = JSON.parse(data);
-      authToken = response.access_token;
+      access_token = response.access_token;
       refresh_token = response.refresh_token
-      console.log(refresh_token)
-      res.send("Successful token");
+      console.log(`Refresh Token: ${refresh_token}`)
+      res.send(access_token)
     }).catch((error) => {
       console.log(error);
       console.log(`Error to get Access token :${JSON.stringify(error)}`);

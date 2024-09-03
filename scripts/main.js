@@ -92,14 +92,14 @@ function userAuth(){
   }
 
 //getUser
-async function getUser(auth_code){
+async function getUser(access_token){
   console.log("Fetching user info")
   return fetch('http://127.0.0.1:3000/userInfo',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({auth_code: auth_code})
+    body: JSON.stringify({access_token: access_token})
   })
   .then((response)=> response.text())
   .then((data)=> {
@@ -134,6 +134,10 @@ async function grantToken(code){
     body: JSON.stringify({code: code})  
   })
   .then((response)=> response.json())
+  .then((data)=> {
+    console.log(data)
+    return data
+  })
 }
 
 //Parses response and builds an HTML div variable stored in sessionStorage
