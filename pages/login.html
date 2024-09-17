@@ -80,9 +80,12 @@
             "password" type= "text" placeholder="password"   aria-label="default input example" input-padding-x="">
         </div>   
     
+        <div class="row justify-content-center">
+            <span id = "login_error" class="d-none p-2" style = "color : rgb(229, 50, 56);">Incorrect user ID or password</span>
+        </div> 
         
-        
-        <div class="row justify-content-center my-4">
+        <div class="row justify-content-center my-2">
+            
             <button class="btn btn-primary" id = "submit" type = "button" onclick="login(userid.value, password.value)">Login</button>
             <div class = "w-100"></div>
             <button class="btn btn-outline-primary btn-sm my-2" id = "submit" type = "button" onclick="window.location.assign('accept.html')">Register with eBay</button>

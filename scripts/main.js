@@ -141,7 +141,7 @@ async function grantToken(code){
 }
 
 //Parses response and builds an HTML div variable stored in sessionStorage
-async function _cb_findItemsByKeywords(){
+async function findItemsByKeywords(){
   var items = JSONData.findItemsAdvancedResponse[0].searchResult[0].item || [];
   var temp = document.createElement('div')
   for (var i = 0; i < items.length; i++){
@@ -216,7 +216,7 @@ async function search(value){
     url = `https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsAdvanced&SERVICE-VERSION=1.3.1&SECURITY-APPNAME=${key}&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD=true&keywords=${keyword}${categoryId}${listingType}&paginationInput.entriesPerPage=8&outputSelector=PictureURLLarge`
     
     await getSearchData();
-    await _cb_findItemsByKeywords();
+    await findItemsByKeywords();
     if(isIndexPage){
       window.location.assign("./swipe.html");
       isIndexPage = false;
@@ -343,6 +343,8 @@ async function login(user_id, password){
     }
   } catch (error){
     console.error('Fetch', error)
+    loginerr = document.getElementById("login_error")
+    loginerr.setAttribute("class","d-block p-2")
   }
 }
 
