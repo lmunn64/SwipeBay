@@ -364,6 +364,8 @@ function checkRegistered(email){
     return data
   })
 }
+
+
 //Takes time code of how much time left there is for a listing and returns a readable time
 function decodeTimeLeft(timeCode){
   timeCodeArr = timeCode.split("")
@@ -425,7 +427,7 @@ async function createCards(card_id, pic, title, price, url, container, bids, tim
   var trackButton = document.createElement("button")
   trackButton.setAttribute("class", "btn btn-primary btn-lg my-2");
   trackButton.innerText = "Track"
-  trackButton.setAttribute("onclick", `openFn(${card_id})`)
+  trackButton.setAttribute("onclick", `openTrack(${card_id})`)
   buttonBody2.append(trackButton);
   
   buttonGroup.append(buttonBody2);
@@ -456,6 +458,7 @@ async function createCards(card_id, pic, title, price, url, container, bids, tim
 
   var cardTitle = document.createElement("h5");
   cardTitle.setAttribute("class","card-title");
+  cardTitle.setAttribute("id", `title_${card_id}`)
   cardTitle.style.fontFamily = "Verdana"
 
   cardTitle.innerText = title;
@@ -473,3 +476,105 @@ async function createCards(card_id, pic, title, price, url, container, bids, tim
   container.appendChild(divCard); 
   console.log(divCard.innerHTML);
 }
+
+async function openTrack(card_id){
+  document.getElementById("main").setAttribute('class', 'container border unclickable');
+  await createTrackItem(card_id)
+  var popupId = `popup_${card_id}`
+  var overlayId = `overlay_${card_id}`
+  const overlay = document.getElementById(overlayId)
+  const popup = document.getElementById(popupId)
+  
+  overlay.classList.toggle("hidden")
+  popup.classList.toggle("hidden")
+
+  popup.style.opacity = popup.style.opacity === "1" ? "0": "1";
+  console.log("openFn")
+}
+async function closeTrack(card_id){
+  
+  var popupId = `popup_${card_id}`
+  var overlayId = `overlay_${card_id}`
+  const overlay = document.getElementById(overlayId)
+  const popup = document.getElementById(popupId)
+
+  overlay.classList.toggle("hidden")
+  popup.classList.toggle("hidden")
+
+  var mainDiv = document.getElementById("main")
+  mainDiv.setAttribute('class', 'container border');
+  var trackDiv = document.getElementById("track")
+  trackDiv.removeChild(popup)
+}
+
+async function createTrackItem(card_id){
+  var divPopup = document.createElement("div");
+  divPopup.setAttribute("class", "position-fixed hidden");
+  divPopup.setAttribute("id", `popup_${card_id}`)
+
+  var divInput = document.createElement("div");
+  divInput.setAttribute("class", "container border input-group mb-3")
+  divInput.setAttribute("id", `$input_div_${card_id}`)
+
+  const title = document.getElementById(`title_${card_id}`).innerText
+  const titleArray = title.split(/[-+\s,*)!/({:}.&]+/)
+  for(var i = 0; i < titleArray.length; i++){
+    if(titleArray[i] != ''){
+      var button = document.createElement("button")
+      button.setAttribute("class","btn btn-sm btn-outline-secondary")
+      button.setAttribute("onclick", "this.remove()")
+      button.setAttribute("type", "button")
+      button.innerHTML = `${titleArray[i]} &#x00d7;`
+      divInput.append(button)
+    }
+  }
+
+  var topText = document.createElement("h4")
+  topText.setAttribute("class", "text-center col-md-12")
+  topText.setAttribute("style", "font-family : Century Gothic")
+  topText.setAttribute("style", "font-weight : 800")
+  topText.innerText ="Track this Item"
+
+  var editText = document.createElement("h6")
+  editText.setAttribute("class", "text-center col-md-12 my")
+  editText.setAttribute("style", "font-family : Century Gothic")
+  editText.setAttribute("style", "font-weight : 700")
+  editText.innerText ="edit keywords"
+
+  var buttonBody = document.createElement("div");
+  buttonBody.setAttribute("class", "col-md-12")
+
+  var buttonGroup = document.createElement("div");
+  buttonGroup.setAttribute("class" , "text-center");
+
+  var exitButton = document.createElement("button")
+  exitButton.setAttribute("class","btn btn-sm btn-outline-primary")
+  exitButton.setAttribute("onclick", `closeTrack(${card_id})`)
+  exitButton.innerHTML = "Close"
+
+  buttonBody.append(exitButton);
+
+  var buttonBody2 = document.createElement("div");
+  buttonBody2.setAttribute("class", "col-md-12")
+
+  var trackButton = document.createElement("button")
+  trackButton.setAttribute("class", "btn btn-primary btn-md my-2");
+  trackButton.innerText = "Track"
+  trackButton.setAttribute("onclick", ``)
+  buttonBody2.append(trackButton);
+  
+  buttonGroup.append(buttonBody2);
+  buttonGroup.append(buttonBody);
+
+  var divOverlay = document.createElement("div");
+  divOverlay.setAttribute("class", "hidden");
+  divOverlay.setAttribute("id", `overlay_${card_id}`)
+
+  divPopup.append(topText)
+  divPopup.append(editText)
+  divPopup.append(divInput)
+  divPopup.append(divOverlay)
+  divPopup.append(buttonGroup)
+
+  document.getElementById("track").append(divPopup)
+}        

@@ -28,8 +28,8 @@
             font-size : 12px
         }
         .form-control{
-                border-radius: 20px
-            }
+            border-radius: 20px
+        }
         
         #overlay {
             position: fixed;
@@ -42,8 +42,10 @@
             display: none;
         }
 
-        #popupTrack {
+        div[id^="popup"] {
             position: absolute;
+            width: 400px;
+            height: 300px;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -54,6 +56,18 @@
             z-index: 1000;
             opacity: 0;
             transition: opacity 0.3s ease-in-out;
+        }
+        div[id^="input_div"] {
+            
+            
+        }
+        input[id^="input_"] {
+            border: 0;
+            outline-width: none;
+            padding: 0px;
+        }
+        .unclickable { 
+            pointer-events: none; 
         }
         </style>
 </head>
@@ -129,7 +143,7 @@
             </div>
 
         </div>
-        <div class="row justify-content-center my-2">
+        <div id = "search" class="row justify-content-center my-2">
             <div class="col-8 col-sm-8 col-md-6 col-lg-6">
                 <input class="form-control" id = 
                 "Search" type= "text" placeholder="Search for items..."     aria-label="default input example" input-padding-x="">
@@ -144,29 +158,13 @@
             <div class="card" style = "width: 25rem; height: 0cm">
                 <div class = 'swipe' id = 'swipe'></div>
             </div>  
-            <div id = "overlay" class = "hidden" ></div>
-            <div id = "popupTrack" class = "hidden">
-                <p id = "popup_text"></p>
-                <button class = "btn btn-sm btn-primary" onclick="openFn()">
-                    Close
-                </button>
-            </div>
         </div>
         
     </div>
-    <script>
-        function openFn(card_id){
-            const overlay = document.getElementById(`overlay`)
-            const popup = document.getElementById(`popupTrack`)
-            const text = document.getElementById(`popup_text`)
-            overlay.classList.toggle("hidden")
-            popup.classList.toggle("hidden")
-            text.innerText = card_id
-            popup.style.opacity = popup.style.opacity === "1" ? "0": "1";
-            console.log("openFn")
-        }
-    </script>
+    <!-- Container for tracking popups -->
+    <div style="height: 850px;" id = "track">
 
+    </div>
     <!-- Slick script for swiping functionality -->
     <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>       
