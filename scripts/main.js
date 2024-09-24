@@ -50,7 +50,7 @@ function listingTypeToggle(){
 function getRefreshToken(){
   if(localStorage.getItem("last_user")){
     var user_id = localStorage.getItem("last_user")
-    return fetch('http://127.0.0.1:3000/updateUserToken', {
+    return fetch('https://swipebay.serveo.net/updateUserToken', {
         method: 'POST',
         headers:{
           'Content-Type': 'application/json'
@@ -84,7 +84,7 @@ function getSearchData(){
 
 //Fetches and redirects to user authorization URL that allows users to authorize app to use their data.
 function userAuth(){
-  return fetch('http://127.0.0.1:3000/auth')
+  return fetch('https://swipebay.serveo.net/auth')
   .then((response)=> response.text())
   .then((data)=> {
     window.location.assign(data);
@@ -94,7 +94,7 @@ function userAuth(){
 //getUser
 async function getUser(access_token){
   console.log("Fetching user info")
-  return fetch('http://127.0.0.1:3000/userInfo',{
+  return fetch('https://swipebay.serveo.net/userInfo',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
@@ -126,7 +126,7 @@ async function getAuthCode(){
 
 //Grants token using auth code
 async function grantToken(code){
-  return fetch('http://127.0.0.1:3000/token',{
+  return fetch('https://swipebay.serveo.net/token',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
@@ -229,7 +229,7 @@ async function search(value){
 function sendNewUser(firstName, lastName, password){
   email = sessionStorage.getItem("user_email")
   userName = localStorage.getItem("last_user")
-  return fetch('http://127.0.0.1:3000/addUser', {
+  return fetch('https://swipebay.serveo.net/addUser', {
     method : 'POST',
     headers:{
       'Content-Type' : 'application/json' 
@@ -318,7 +318,7 @@ function logout(){
 async function login(user_id, password){
   var loginData
   try{
-    const response = await fetch('http://127.0.0.1:3000/login', {
+    const response = await fetch('https://swipebay.serveo.net/login', {
     method : 'POST',
     headers:{
       'Content-Type' : 'application/json' 
@@ -345,7 +345,7 @@ async function login(user_id, password){
 }
 
 function checkRegistered(email){
-  fetch('http://127.0.0.1:3000/userExist', {
+  fetch('https://swipebay.serveo.net/userExist', {
     method : 'POST',
     headers : {
       'Content-Type' : 'application/json'
