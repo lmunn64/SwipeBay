@@ -175,7 +175,7 @@ async function findItemsByKeywords(){
   
   }
 function getKey(){
-    return fetch('http://127.0.0.1:3000/key')
+    return fetch('https://swipebay.serveo.net/key')
     .then((response)=> response.text())
     .then((data)=> {
       key = data
