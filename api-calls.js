@@ -38,7 +38,7 @@ app.use(cors())
 app.use(bodyParser.json());
 
 const options = {
-    origin: 'http://localhost:3000',
+    origin: 'http://swipebay.serveo.net:3000',
     }
 app.use(cors(options))
 
