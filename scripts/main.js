@@ -251,9 +251,11 @@ function changeCategoryText(category){
 
 function setLogInDiv(isLoggedIn){
   var div = document.getElementById("bottom");
-
+  var center = document.getElementById("center");
+  var userdiv = document.getElementById("user");
+  var buttonDiv = document.getElementById("button");
   if(isLoggedIn){
-    div.setAttribute("class", "fixed-bottom my-4")
+    div.setAttribute("class", "row justify-content-center my-4")
 
     var text = document.createElement("p")
     text.setAttribute("class", "text-center")
@@ -266,24 +268,21 @@ function setLogInDiv(isLoggedIn){
     user.innerText = localStorage.getItem("last_user")
     user.setAttribute("style", "font-size : small; color : grey")
 
-    var buttonDiv = document.createElement("div")
-    buttonDiv.setAttribute("class", "row justify-content-center")
-
     var button = document.createElement("button")
     button.setAttribute("class", "btn btn-outline-primary btn-sm")
     button.setAttribute("id", "submit")
     button.setAttribute("role", "button")
     button.innerText = "Log Out"
     button.setAttribute("onclick", "logout()")
-    
+
+    center.appendChild(text)
+    userdiv.appendChild(user)
     buttonDiv.append(button)
 
-    div.appendChild(text)
-    div.appendChild(user)
-    div.appendChild(buttonDiv)
+    
   }
   else{
-    div.setAttribute("class", "fixed-bottom my-4")
+    div.setAttribute("class", "row align-items-end my-4")
 
     var text = document.createElement("p")
     text.setAttribute("class", "text-center")
@@ -292,9 +291,6 @@ function setLogInDiv(isLoggedIn){
  
     
     text.innerText = "Allow swipeBay to use your eBay account to add items to watchlist and other things I might add!"
-
-    var buttonDiv = document.createElement("div")
-    buttonDiv.setAttribute("class", "row justify-content-center")
 
     var button = document.createElement("button")
     button.setAttribute("class", "btn btn-outline-primary btn-sm")
@@ -308,9 +304,9 @@ function setLogInDiv(isLoggedIn){
 
     buttonDiv.appendChild(button)
 
-    div.appendChild(text)
-    div.appendChild(user)
-    div.appendChild(buttonDiv)
+    center.appendChild(text)
+   
+    buttonDiv.append(button)
   }
 }
 
