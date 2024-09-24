@@ -285,7 +285,7 @@ function setLogInDiv(isLoggedIn){
     div.setAttribute("class", "row align-items-end my-4")
 
     var text = document.createElement("p")
-    text.setAttribute("class", "text-center")
+    text.setAttribute("class", "text-center col-lg-4 col-md-6 col-sm-8 col-8 my-2")
 
     text.setAttribute("style", "font-size : small; color : grey")
  
