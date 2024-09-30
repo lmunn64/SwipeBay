@@ -473,6 +473,7 @@ async function createCards(card_id, pic, title, price, url, container, bids, tim
   console.log(divCard.innerHTML);
 }
 
+//open and close functions for tracking popup
 async function openTrack(card_id){
   document.getElementById("main").setAttribute('class', 'container border unclickable');
   await createTrackItem(card_id)
@@ -503,6 +504,7 @@ async function closeTrack(card_id){
   trackDiv.removeChild(popup)
 }
 
+//creates tracking popup for item
 async function createTrackItem(card_id){
   var divPopup = document.createElement("div");
   divPopup.setAttribute("class", "position-fixed hidden");
@@ -510,7 +512,7 @@ async function createTrackItem(card_id){
 
   var divInput = document.createElement("div");
   divInput.setAttribute("class", "container border input-group mb-3")
-  divInput.setAttribute("id", `$input_div_${card_id}`)
+  divInput.setAttribute("id", `input_div_${card_id}`)
 
   const title = document.getElementById(`title_${card_id}`).innerText
   const titleArray = title.split(/[-+\s,*)!/({:}.&]+/)
@@ -556,7 +558,7 @@ async function createTrackItem(card_id){
   var trackButton = document.createElement("button")
   trackButton.setAttribute("class", "btn btn-primary btn-md my-2");
   trackButton.innerText = "Track"
-  trackButton.setAttribute("onclick", ``)
+  trackButton.setAttribute("onclick", `trackItem(${card_id})`)
   buttonBody2.append(trackButton);
   
   buttonGroup.append(buttonBody2);
@@ -574,3 +576,46 @@ async function createTrackItem(card_id){
 
   document.getElementById("track").append(divPopup)
 }        
+function getKeywordsFromItem(card_id){
+console.log("getting keywordss")
+var div = document.getElementById(`input_div_${card_id}`)
+var keywords_list = div.children
+var keywords = []
+for(var i = 0; i < keywords_list.length; i++){
+  keywords.push(keywords_list[i].innerText.split(' ')[0])
+}
+return keywords
+}
+
+async function getUserId(){
+  user_name = window.localStorage.getItem('last_user')
+  return fetch('https://swipebay.serveo.net/getUserId', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({user_name: user_name})
+  })
+  .then((response)=>response.json())
+  .then((data)=> {
+    console.log(data[0][0].id)
+    return data[0][0].id
+  })
+  
+}
+async function trackItem(card_id){
+  console.log("getting track")
+  const keywords = getKeywordsFromItem(card_id) 
+  console.log(keywords)
+  user_id = await getUserId()
+  console.log(user_id)
+  return fetch('https://swipebay.serveo.net/addTrack', {
+    method: 'POST', 
+    headers:{
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({item_data: JSON.stringify(keywords),
+                          user_id : user_id
+    })
+  })
+}

@@ -225,6 +225,54 @@ app.post("/userExist", cors(), async(req,res) =>{
     console.log(msg)
     res.send("1")
   }
+})
+
+app.post("/addTrack", cors(), async(req,res)=>{
+  console.log("Running /addTrack...\n")
+  try{
+    //Check if response body contains data
+    console.log(req.body)
+    if(!req.body){
+      const msg = "POST: Bad request: No data provided.";
+      console.log(msg);
+      return res.status(400).send({error:msg})
+    }
+
+    //Check if table exists
+    const [tableExists] = await database.query("SHOW TABLES LIKE 'saved_items'");
+    if(tableExists.length === 0){
+      const msg = "POST: Table does not exist.";
+      console.log(msg);
+      return res.status(404).send({error:msg})
+    }
+    console.log("POST: Table does exist.");
+
+
+    //Add user
+    const {user_id, item_data} = req.body;
+    
+    const insertSQL = "INSERT INTO saved_items (user_id, item_data, start_time) VALUES (?, ?, ?)";
+    const insertResult = await database.query(insertSQL, [user_id, item_data, "0"])
+
+    const msg = "POST: Successfully added user";    
+    console.log(msg);
+    return res.status(200).send({success:msg})
+    
+    } catch(err) {
+      const msg = "POST: An ERROR occurred in Post "+err;
+      console.error(msg);
+      res.status(500).send({error:msg});
+    }
+  
+})
+app.post('/getUserId', cors(), async (req, res)=>{
+  res.set({
+    "Access-Control-Allow-Origin": "*"
+  });
+  user_name = req.body.user_name
+  const insertSQL = "SELECT id FROM users WHERE `userName` = ? VALUES (?)";
+  const id = await database.query("SELECT id FROM users WHERE `userName` = ?", user_name)
+  res.send(id)
 
 })
 app.post('/updateUserToken', cors(), async (req, res)=>{
