@@ -50,7 +50,7 @@ function listingTypeToggle(){
 function getRefreshToken(){
   if(localStorage.getItem("last_user")){
     var user_id = localStorage.getItem("last_user")
-    return fetch('https://swipebay.serveo.net/updateUserToken', {
+    return fetch('https://2366bcb79baf41.lhr.life/updateUserToken', {
         method: 'POST',
         headers:{
           'Content-Type': 'application/json'
@@ -68,7 +68,7 @@ function getRefreshToken(){
 }
 // Make a GET request
 function getSearchData(){
-  return fetch('https://swipebay.serveo.net/search',{
+  return fetch('https://2366bcb79baf41.lhr.life/search',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
@@ -84,7 +84,7 @@ function getSearchData(){
 
 //Fetches and redirects to user authorization URL that allows users to authorize app to use their data.
 function userAuth(){
-  return fetch('https://swipebay.serveo.net/auth')
+  return fetch('https://2366bcb79baf41.lhr.life/auth')
   .then((response)=> response.text())
   .then((data)=> {
     window.location.assign(data);
@@ -94,7 +94,7 @@ function userAuth(){
 //getUser
 async function getUser(access_token){
   console.log("Fetching user info")
-  return fetch('https://swipebay.serveo.net/userInfo',{
+  return fetch('https://2366bcb79baf41.lhr.life/userInfo',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
@@ -126,7 +126,7 @@ async function getAuthCode(){
 
 //Grants token using auth code
 async function grantToken(code){
-  return fetch('https://swipebay.serveo.net/token',{
+  return fetch('https://2366bcb79baf41.lhr.life/token',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
@@ -175,7 +175,7 @@ async function findItemsByKeywords(){
   
   }
 function getKey(){
-    return fetch('https://swipebay.serveo.net/key')
+    return fetch('https://2366bcb79baf41.lhr.life/key')
     .then((response)=> response.text())
     .then((data)=> {
       key = data
@@ -229,7 +229,7 @@ async function search(value){
 function sendNewUser(firstName, lastName, password){
   email = sessionStorage.getItem("user_email")
   userName = localStorage.getItem("last_user")
-  return fetch('https://swipebay.serveo.net/addUser', {
+  return fetch('https://2366bcb79baf41.lhr.life/addUser', {
     method : 'POST',
     headers:{
       'Content-Type' : 'application/json' 
@@ -318,7 +318,7 @@ function logout(){
 async function login(user_id, password){
   var loginData
   try{
-    const response = await fetch('https://swipebay.serveo.net/login', {
+    const response = await fetch('https://2366bcb79baf41.lhr.life/login', {
     method : 'POST',
     headers:{
       'Content-Type' : 'application/json' 
@@ -345,7 +345,7 @@ async function login(user_id, password){
 }
 
 function checkRegistered(email){
-  fetch('https://swipebay.serveo.net/userExist', {
+  fetch('https://2366bcb79baf41.lhr.life/userExist', {
     method : 'POST',
     headers : {
       'Content-Type' : 'application/json'
@@ -589,7 +589,7 @@ return keywords
 
 async function getUserId(){
   user_name = window.localStorage.getItem('last_user')
-  return fetch('https://swipebay.serveo.net/getUserId', {
+  return fetch('https://2366bcb79baf41.lhr.life/getUserId', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -601,7 +601,7 @@ async function getUserId(){
     console.log(data[0][0].id)
     return data[0][0].id
   })
-  
+
 }
 async function trackItem(card_id){
   console.log("getting track")
@@ -609,7 +609,7 @@ async function trackItem(card_id){
   console.log(keywords)
   user_id = await getUserId()
   console.log(user_id)
-  return fetch('https://swipebay.serveo.net/addTrack', {
+  return fetch('https://2366bcb79baf41.lhr.life/addTrack', {
     method: 'POST', 
     headers:{
       'Content-Type': 'application/json'

@@ -1,1 +1,1 @@
-node api-calls.js wait & ssh -R swipebay:80:localhost:3000 serveo.net ; fg
+node api-calls.js wait & ssh -R 80:localhost:3000 plan@localhost.run ; fg

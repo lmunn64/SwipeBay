@@ -38,7 +38,7 @@ app.use(cors())
 app.use(bodyParser.json());
 
 const options = {
-    origin: 'https://swipebay.serveo.net:3000',
+    origin: 'https://2366bcb79baf41.lhr.life:3000',
     }
 app.use(cors(options))
 
