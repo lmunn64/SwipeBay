@@ -44,8 +44,6 @@
 
         div[id^="popup"] {
             position: absolute;
-            width: 400px;
-            height: 300px;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -54,8 +52,7 @@
             border-radius: 8px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
+            opacity: 1
         }
         div[id^="input_div"] {
             
@@ -68,6 +65,21 @@
         }
         .unclickable { 
             pointer-events: none; 
+        }
+        .fade.show{
+           opacity: 1;
+           visibility: visible;
+        }
+        .fade{
+            opacity: 0;
+            visibility: hidden;
+            -webkit-transition: opacity 0.15s linear;
+            -o-transition: opacity 0.15s linear;
+            transition: opacity 0.15s linear;
+            transition-property: opacity;
+            transition-duration: 0.15s;
+            transition-timing-function: linear;
+            transition-delay: initial;
         }
         </style>
 </head>

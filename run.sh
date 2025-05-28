@@ -1,1 +1,1 @@
-node api-calls.js wait & ssh -R 80:localhost:3000 plan@localhost.run ; fg
+npm run dev wait & ssh -R 80:localhost:3000 plan@localhost.run ; fg

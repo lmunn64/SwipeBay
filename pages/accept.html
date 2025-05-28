@@ -52,20 +52,25 @@
     <script>
     window.addEventListener("load", myInit, true); 
     async function myInit(){
-        // const authCode = await getAuthCode();
-        // access_token = await grantToken(authCode);
-        // user_info = await getUser(access_token);
-        sessionStorage.setItem("email", "lmunn64@gmail.com")
-        var email = sessionStorage.getItem("email")
-        var registered = checkRegistered(email)
-        
-        if(!registered){
-            console.log("User already exists")
-            window.location.assign("./login.html")
-        }
-        window.sessionStorage.setItem("access_token", access_token);
-        authCode = NULL
-        
+        try{
+            let flow_type = sessionStorage.getItem("flow_type");
+            console.log("Flow Type: ", flow_type);
+            if(flow_type = "registration"){
+                const authCode = await getAuthCode();
+                const access_token = await grantToken(authCode);
+                const user_info = await getUser(access_token);
+
+                sessionStorage.setItem("access_token", access_token);
+                // Clear the flow type
+                sessionStorage.removeItem('flow_type');
+            } else {
+                // Handle other flows (like login)
+                console.log("Not a registration flow");
+                window.location.href = './login.html';
+            }
+        } catch(e){
+            console.error("Error during initialization: ", e);
+        }   
     }
     </script>
      <!-- Container for entire page -->

@@ -8,7 +8,7 @@ const api_key = process.env.API_KEY;
 const ru_name = process.env.RU_NAME
 const client_secret = process.env.CLIENT_SECRET
 
-const b64encode = btoa(api_key+':'+client_secret);
+const b64encode = btoa(api_key + ':' + client_secret);
 
 const scopes = ['https://api.ebay.com/oauth/api_scope',
     'https://api.ebay.com/oauth/api_scope/sell.marketing.readonly',
@@ -34,12 +34,18 @@ const PORT=3000;
 const cors=require('cors');
 app.use(cors())
 
+app.use(express.static(__dirname));
+
 // Middleware
 app.use(bodyParser.json());
 
 const options = {
-    origin: 'https://2366bcb79baf41.lhr.life:3000',
-    }
+  origin: [
+      /^https:\/\/.*\.lhr\.life$/,
+      'https://lmunn64.github.io',
+      'localhost:3000',
+  ]
+}
 app.use(cors(options))
 
 const EbayAuthToken = require('ebay-oauth-nodejs-client');
@@ -50,7 +56,9 @@ const ebayAuthToken = new EbayAuthToken({
     clientSecret: client_secret,
     redirectUri: ru_name
 });
-
+app.post("/", cors(), async (req, res) => {
+  console.log("Running /...\n")
+})
 //Add user to local database
 app.post("/addUser", cors(), async (req, res) => {
   console.log("Running /addUser...\n")
@@ -149,13 +157,18 @@ app.get('/key', cors(), (req, res) => {
 })
 
 app.get('/auth', cors(), (req, res) =>{
-  console.log("Running /auth...\n")
-  res.set({
-    "Access-Control-Allow-Origin": "*",
-  });
+  try {
+    console.log("Running /auth...\n")
+    res.set({
+      "Access-Control-Allow-Origin": "*",
+    });
     const authUrl = ebayAuthToken.generateUserAuthorizationUrl('PRODUCTION', scopes);
-    console.log(authUrl);
+    console.log("Generated auth URL:", authUrl);
     res.send(authUrl);
+  } catch (error) {
+      console.error('Error generating auth URL:', error);
+      res.status(500).send('Error generating authorization URL');
+  }
 })
 
 app.post('/token', cors(),(req, res)=>{

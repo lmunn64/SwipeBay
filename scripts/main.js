@@ -50,7 +50,7 @@ function listingTypeToggle(){
 function getRefreshToken(){
   if(localStorage.getItem("last_user")){
     var user_id = localStorage.getItem("last_user")
-    return fetch('https://2366bcb79baf41.lhr.life/updateUserToken', {
+    return fetch('http://localhost:3000/updateUserToken', {
         method: 'POST',
         headers:{
           'Content-Type': 'application/json'
@@ -68,7 +68,8 @@ function getRefreshToken(){
 }
 // Make a GET request
 function getSearchData(){
-  return fetch('https://2366bcb79baf41.lhr.life/search',{
+  console.log("Fetching search data from: " + url)
+  return fetch('http://localhost:3000/search',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
@@ -81,20 +82,33 @@ function getSearchData(){
     console.log(JSONData)
 });
 }
+function registerWithEbay(){
+    // Clear any existing user data
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // Redirect to eBay authorization
+    userAuth();
+}
 
 //Fetches and redirects to user authorization URL that allows users to authorize app to use their data.
 function userAuth(){
-  return fetch('https://2366bcb79baf41.lhr.life/auth')
+  return fetch('http://localhost:3000/auth')
   .then((response)=> response.text())
   .then((data)=> {
+    // Store that this is a registration flow
+    sessionStorage.setItem('flow_type', 'registration');
     window.location.assign(data);
   })
+  .catch(error => {
+    console.error('Error getting auth URL:', error);
+  });
   }
 
 //getUser
 async function getUser(access_token){
   console.log("Fetching user info")
-  return fetch('https://2366bcb79baf41.lhr.life/userInfo',{
+  return fetch('http://localhost:3000/userInfo',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
@@ -110,8 +124,7 @@ async function getUser(access_token){
     console.log($email.text())
     window.localStorage.setItem('last_user', $user.text());
     window.sessionStorage.setItem('user_email', $email.text());
-
-    // document.getElementById('user').innerHTML = window.sessionStorage.getItemuserId')
+    
   })
   }
 
@@ -126,7 +139,7 @@ async function getAuthCode(){
 
 //Grants token using auth code
 async function grantToken(code){
-  return fetch('https://2366bcb79baf41.lhr.life/token',{
+  return fetch('http://localhost:3000/token',{
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'
@@ -175,7 +188,7 @@ async function findItemsByKeywords(){
   
   }
 function getKey(){
-    return fetch('https://2366bcb79baf41.lhr.life/key')
+    return fetch('http://localhost:3000/key')
     .then((response)=> response.text())
     .then((data)=> {
       key = data
@@ -229,7 +242,7 @@ async function search(value){
 function sendNewUser(firstName, lastName, password){
   email = sessionStorage.getItem("user_email")
   userName = localStorage.getItem("last_user")
-  return fetch('https://2366bcb79baf41.lhr.life/addUser', {
+  return fetch('http://localhost:3000/addUser', {
     method : 'POST',
     headers:{
       'Content-Type' : 'application/json' 
@@ -318,7 +331,7 @@ function logout(){
 async function login(user_id, password){
   var loginData
   try{
-    const response = await fetch('https://2366bcb79baf41.lhr.life/login', {
+    const response = await fetch('http://localhost:3000/login', {
     method : 'POST',
     headers:{
       'Content-Type' : 'application/json' 
@@ -345,7 +358,7 @@ async function login(user_id, password){
 }
 
 function checkRegistered(email){
-  fetch('https://2366bcb79baf41.lhr.life/userExist', {
+  fetch('http://localhost:3000/userExist', {
     method : 'POST',
     headers : {
       'Content-Type' : 'application/json'
@@ -589,7 +602,7 @@ return keywords
 
 async function getUserId(){
   user_name = window.localStorage.getItem('last_user')
-  return fetch('https://2366bcb79baf41.lhr.life/getUserId', {
+  return fetch('http://localhost:3000/getUserId', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -609,7 +622,7 @@ async function trackItem(card_id){
   console.log(keywords)
   user_id = await getUserId()
   console.log(user_id)
-  return fetch('https://2366bcb79baf41.lhr.life/addTrack', {
+  return fetch('http://localhost:3000/addTrack', {
     method: 'POST', 
     headers:{
       'Content-Type': 'application/json'

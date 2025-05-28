@@ -53,10 +53,6 @@
         window.addEventListener("load", myInit, true); 
         function myInit(){
             var previousPage = document.referrer.split('/')
-            if(previousPage[previousPage.length-1] == "accept.html"){
-                console.log("User already exists")
-            }
-            
         }
     </script>
      <!-- Container for entire page -->
@@ -88,7 +84,7 @@
             
             <button class="btn btn-primary" id = "submit" type = "button" onclick="login(userid.value, password.value)">Login</button>
             <div class = "w-100"></div>
-            <button class="btn btn-outline-primary btn-sm my-2" id = "submit" type = "button" onclick="window.location.assign('accept.html')">Register with eBay</button>
+            <button class="btn btn-outline-primary btn-sm my-2" id = "submit" type = "button" onclick="registerWithEbay()">Register with eBay</button>
        </div> 
 
     </div>
