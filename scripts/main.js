@@ -1,27 +1,4 @@
-
-// Define the API URL
-var key
-var keyword
-var url = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&SECURITY-APPNAME='+key+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+keyword+'&itemFilter.name=MaxPrice&itemFilter.value=10.00&itemFilter.paramName=Currency&itemFilter.paramValue=USD&paginationInput.entriesPerPage=6&outputSelector=pictureURLLarge' 
-
-var JSONData;
 var isIndexPage = true;
-
-var itemFilter = [
-  {"name":"MaxPrice",
-   "value":"25",
-   "paramName":"Currency",
-   "paramValue":"USD"},
-  {"name":"FreeShippingOnly",
-   "value":"true",
-   "paramName":"",
-   "paramValue":""},
-  {"name":"ListingType",
-   "value":["AuctionWithBIN", "FixedPrice"],
-   "paramName":"",
-   "paramValue":""},
-  ];
-
 
 function swipeFunction(){ 
       $(document).ready(function(){ 
@@ -47,6 +24,7 @@ function listingTypeToggle(){
   else
   document.querySelector("#BIN").classList.toggle("active")
 }
+
 function getRefreshToken(){
   if(localStorage.getItem("last_user")){
     var user_id = localStorage.getItem("last_user")
@@ -185,16 +163,7 @@ async function findItemsByKeywords(){
     }
   }
   window.sessionStorage.setItem("searchValue", temp.innerHTML);
-  
   }
-function getKey(){
-    return fetch('http://localhost:3000/key')
-    .then((response)=> response.text())
-    .then((data)=> {
-      key = data
-      console.log(data)
-    })
-}
 
 function getCategory(){
   categoryId = document.querySelector("#category").value
@@ -220,8 +189,6 @@ function getListingType(){
 
 //Complete search function
 async function search(value){
-    await getKey() // sets local key to api key
-
     keyword = value
     categoryId = getCategory()
     listingType = getListingType()
@@ -589,15 +556,16 @@ async function createTrackItem(card_id){
 
   document.getElementById("track").append(divPopup)
 }        
+
 function getKeywordsFromItem(card_id){
-console.log("getting keywordss")
-var div = document.getElementById(`input_div_${card_id}`)
-var keywords_list = div.children
-var keywords = []
-for(var i = 0; i < keywords_list.length; i++){
-  keywords.push(keywords_list[i].innerText.split(' ')[0])
-}
-return keywords
+  console.log("getting keywordss")
+  var div = document.getElementById(`input_div_${card_id}`)
+  var keywords_list = div.children
+  var keywords = []
+  for(var i = 0; i < keywords_list.length; i++){
+    keywords.push(keywords_list[i].innerText.split(' ')[0])
+  }
+  return keywords
 }
 
 async function getUserId(){
@@ -628,7 +596,7 @@ async function trackItem(card_id){
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({item_data: JSON.stringify(keywords),
-                          user_id : user_id
+        user_id : user_id
     })
   })
 }
