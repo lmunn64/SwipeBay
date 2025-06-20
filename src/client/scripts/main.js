@@ -76,7 +76,7 @@ function userAuth(){
   .then((data)=> {
     // Store that this is a registration flow
     sessionStorage.setItem('flow_type', 'registration');
-    window.location.assign(data);
+    
   })
   .catch(error => {
     console.error('Error getting auth URL:', error);

@@ -1,4 +1,6 @@
 const { ebayAuthToken, scopes } = require('../ebay');
+const config = require('../config/environment');
+const axios = require('axios')
 
 class AuthController {
     static async getAuthURL(req, res){
@@ -8,10 +10,10 @@ class AuthController {
             // res.set({
             //     "Access-Control-Allow-Origin": "*",
             // });
-
+            console.log(scopes)
             const authUrl = ebayAuthToken.generateUserAuthorizationUrl('PRODUCTION', scopes);
             console.log("Generated auth URL:", authUrl);
-            res.send(authUrl);
+            res.redirect(authUrl);
         } catch (error) {
             console.error('Error generating auth URL:', error);
             res.status(500).send('Error generating authorization URL');
@@ -19,21 +21,21 @@ class AuthController {
     }
     static async exchangeAuthCode(req, res){
         try{
-            console.log("Running exchangeToken...\n")
+            console.log("Running exchangeAuthToken...\n")
 
             // res.set({
             //     "Access-Control-Allow-Origin": "*"
             // });
 
-            const {code} = req.body.code
-
+            const code = req.body.code
+            console.log("code: ", code)
             if(!code){
                 return res.status(400).json({error: 'Authorization code is required'})
             }
 
             const token = await ebayAuthToken.exchangeCodeForAccessToken('PRODUCTION', code) 
 
-            console.log(`Access Token: ${token.access_token}`)
+            console.log(`Access Token: ${token}`)
 
             res.json({ 
                 access_token: token.access_token,
@@ -47,7 +49,7 @@ class AuthController {
     }
 
     // refresh the token with the refresh token
-    static async refreshToken (req, res){
+    static async refreshToken(req, res){
         try{
             const { refreshToken } = req.body
 
@@ -67,10 +69,11 @@ class AuthController {
             res.status(500).json({error: 'Failed to refresh access token'})
         }
     }
-    static async getApplicationToken() {
+    static async getApplicationToken(req, res) {
         try {
             const credentials = Buffer.from(`${config.EBAY.API_KEY}:${config.EBAY.CLIENT_SECRET}`).toString('base64');
             
+
             const response = await axios.post('https://api.ebay.com/identity/v1/oauth2/token', 
                 'grant_type=client_credentials&scope=https://api.ebay.com/oauth/api_scope',
                 {
@@ -80,8 +83,11 @@ class AuthController {
                     }
                 }
             );
-            
-            return response.data.access_token;
+
+            res.json({
+                access_token: response.data.access_token,
+                expires_in: response.data.expires_in
+            })
         } catch (error) {
             console.error('Error getting application token:', error);
             throw error;
